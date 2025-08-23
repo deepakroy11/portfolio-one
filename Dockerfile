@@ -8,7 +8,7 @@ RUN npm ci
 
 # Copy all project files and build the app
 COPY . .
-RUN run build
+RUN npm run build
 
 #Production run time
 FROM node:18-alpine AS runner
