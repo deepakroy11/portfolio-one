@@ -1,33 +1,47 @@
-#Stage 1: Build
-FROM node:18-alpine as builder
+# Stage 1: Build
+FROM node:18-slim AS builder
 WORKDIR /app
 
-#Copy dependency
+# Install dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Copy all project files and build the app
+# Copy Prisma schema and generate client
+COPY prisma ./prisma
+RUN npx prisma generate
+
+# Copy rest of the source code
 COPY . .
+
+# Build the Next.js app
 RUN npm run build
 
-#Production run time
-FROM node:18-alpine AS runner
+# Stage 2: Production runtime
+FROM node:18-slim AS runner
 WORKDIR /app
 
-# Copy built app and production dependencies only
+# Install only production dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev
+
+# Copy built app and necessary files
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma
+
+# Only copy next.config.js if it exists
+# If you don’t use it, comment this out to avoid checksum errors
 COPY --from=builder /app/next.config.js ./next.config.js
+
+# Optional: Copy environment variables
+# COPY .env.production .env
 
 # Expose Next.js default port
 EXPOSE 3000
 
-# Recommended: run as non-root for security
+# Run as non-root user for security
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
 USER nextjs
 
-
-# Generate Prisma client, apply migrations, then start app
-CMD npm run db:generate && npm run db:deploy && npm run start
+# Final startup command
+CMD npx prisma generate && npx prisma migrate deploy && npm run start
