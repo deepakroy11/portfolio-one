@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../../styles/globals.css";
-import SidebarWrapper from "@/components/SidebarWrapper";
+import AdminSidebarWrapper from "@/components/admin/AdminSidebarWrapper";
 import SessionWrapper from "@/components/SessionWrapper";
 import { ThemeProvider } from "@/context/themeProvider";
 
@@ -29,7 +29,7 @@ export default function AdminLayout({
     <ThemeProvider>
       <SessionWrapper>
         <div className="min-h-screen flex bg-background">
-          <SidebarWrapper />
+          <AdminSidebarWrapper />
           <div className="flex-1 flex flex-col lg:ml-0">
             <main className="flex-1 overflow-auto">
               {children}

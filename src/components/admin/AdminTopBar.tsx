@@ -15,7 +15,7 @@ import { BsBell, BsBoxArrowRight } from "react-icons/bs";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-const TopBar = () => {
+const AdminTopBar = () => {
   const { data: session } = useSession();
   const pathname = usePathname();
 
@@ -64,4 +64,4 @@ const TopBar = () => {
   );
 };
 
-export default TopBar;
+export default AdminTopBar;

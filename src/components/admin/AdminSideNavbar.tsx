@@ -39,7 +39,7 @@ const portfolioMenuItems = [
   },
 ];
 
-const SideNavbar = () => {
+const AdminSideNavbar = () => {
   const pathname = usePageCheck();
 
   return (
@@ -101,4 +101,4 @@ const SideNavbar = () => {
   );
 };
 
-export default SideNavbar;
+export default AdminSideNavbar;

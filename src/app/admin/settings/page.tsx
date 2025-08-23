@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import SettingsTabs from "@/components/SettingsTabs";
+import AdminSettingsTabs from "@/components/admin/AdminSettingsTabs";
 import { BasicDetails } from "@prisma/client";
 
 const fallbackDetails: BasicDetails = {
@@ -37,7 +37,7 @@ export default async function SettingPage() {
       </div>
 
       {/* Tabs */}
-      <SettingsTabs
+      <AdminSettingsTabs
         basicDetails={basicDetails}
         projects={projects}
         skills={skills}

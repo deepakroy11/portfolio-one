@@ -1,6 +1,6 @@
 import { Skeleton } from "@heroui/react";
 
-export default function PostFormSkeleton() {
+export default function AdminPostFormSkeleton() {
   return (
     <div className="flex-1 p-8 space-y-10">
       {/* Header Skeleton */}

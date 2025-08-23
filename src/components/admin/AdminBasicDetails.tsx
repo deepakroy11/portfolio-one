@@ -3,7 +3,7 @@ import { Form, Input, Textarea, Button, Alert, Image } from "@heroui/react";
 import type { BasicDetails } from "@prisma/client";
 import { useState, useRef } from "react";
 
-const BasicDetails = ({ details }: { details: BasicDetails }) => {
+const AdminBasicDetails = ({ details }: { details: BasicDetails }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -163,4 +163,4 @@ const BasicDetails = ({ details }: { details: BasicDetails }) => {
   );
 };
 
-export default BasicDetails;
+export default AdminBasicDetails;

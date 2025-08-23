@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, Tab, Card, CardBody } from "@heroui/react";
-import BasicDetails from "@/components/BasicDetails";
+import AdminBasicDetails from "@/components/admin/AdminBasicDetails";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import type {
@@ -14,23 +14,23 @@ type ProjectWithSkills = Project & {
   skills?: Skill[];
 };
 
-interface SettingsTabsProps {
+interface AdminSettingsTabsProps {
   basicDetails: BasicDetailsType | null;
   projects: ProjectWithSkills[];
   skills: Skill[];
   fallbackDetails: BasicDetailsType;
 }
 
-export default function SettingsTabs({
+export default function AdminSettingsTabs({
   basicDetails,
   projects,
   skills,
   fallbackDetails,
-}: SettingsTabsProps) {
+}: AdminSettingsTabsProps) {
   return (
     <Tabs aria-label="Portfolio settings tabs" color="primary" radius="lg">
       <Tab key="basic-details" title="Basic Details">
-        <BasicDetails details={basicDetails ?? fallbackDetails} />
+        <AdminBasicDetails details={basicDetails ?? fallbackDetails} />
       </Tab>
 
       <Tab key="skills" title="Skills">

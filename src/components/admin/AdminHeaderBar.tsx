@@ -1,4 +1,4 @@
-// components/HeaderBar.tsx
+// components/admin/AdminHeaderBar.tsx
 "use client";
 
 import {
@@ -10,7 +10,7 @@ import {
 } from "@heroui/react";
 import { useSession, signOut } from "next-auth/react";
 
-export default function HeaderBar() {
+export default function AdminHeaderBar() {
   const { data: session } = useSession();
 
   return (

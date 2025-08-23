@@ -2,7 +2,7 @@
 
 import { Skeleton } from "@heroui/react";
 
-export default function FullPageSkeleton() {
+export default function AdminFullPageSkeleton() {
   return (
     <main className="flex-1 p-8 space-y-8 animate-pulse">
       {/* Page Title */}
