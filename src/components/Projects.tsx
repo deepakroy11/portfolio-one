@@ -26,7 +26,7 @@ export default function Projects({
   projects?: Project[];
   skills?: Skill[];
 }) {
-  console.log("Projects received:", projects);
+
 
   const projectList = projects ?? [];
 

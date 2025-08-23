@@ -71,7 +71,7 @@ const AdminBasicDetails = ({ details }: { details: BasicDetails }) => {
         setTimeout(() => setError(null), 3000);
       }
     } catch (error) {
-      console.log(error);
+
     } finally {
       setIsLoading(false);
     }

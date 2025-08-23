@@ -48,7 +48,7 @@ export default async function PostsPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  // console.log("slug", slug);
+
 
   const [post, categories, tags] = await Promise.all([
     fetchSinglePost(`api/post/${slug}`),

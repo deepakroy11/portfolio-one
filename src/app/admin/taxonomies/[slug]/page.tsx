@@ -39,7 +39,7 @@ const TaxonomyMetaPage = () => {
   const [taxonomyWithMetas, setTaxonomyWithMetas] =
     useState<TaxonomyWithMetasProps | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  // console.log(taxonomyWithMetas);
+
 
   useEffect(() => {
     const getTaxonomyMeta = async () => {

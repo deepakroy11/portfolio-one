@@ -127,7 +127,7 @@ export async function PUT(req: NextRequest) {
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const uploadDir = path.join(process.cwd(), "public", "uploads");
-    // console.log("Upload", uploadDir);
+
 
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -135,7 +135,7 @@ export async function PUT(req: NextRequest) {
 
     const file_name = Date.now() + "-" + imageFile.name;
     const filePath = path.join(uploadDir, file_name);
-    // console.log("filePath", filePath);
+
 
     await writeFile(filePath, buffer);
     const imageUrl = `${baseUrl}/uploads/${file_name}`;

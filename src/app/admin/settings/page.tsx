@@ -21,7 +21,7 @@ export default async function SettingPage() {
       skills: true,
     },
   });
-  console.log("Seeting Page", projects);
+
   const skills = await db.skill.findMany();
 
   return (
