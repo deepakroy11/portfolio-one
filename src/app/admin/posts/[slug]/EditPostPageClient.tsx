@@ -68,12 +68,8 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleEditorChange = (
-    event: unknown,
-    editor: { getData: () => string }
-  ) => {
-    const data = editor.getData();
-    setEditorData(data);
+  const handleEditorChange = (content: string) => {
+    setEditorData(content);
   };
 
   const handleClick = () => {
@@ -106,7 +102,7 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
       formData.append("image", imageFile);
     }
 
-    const response = await fetch(`/api/admin/post/${post.slug}`, {
+    const response = await fetch(`/api/post/${post.slug}`, {
       method: "PUT",
       body: formData,
     });
@@ -127,13 +123,13 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
       <div className="w-full max-w-4xl  flex justify-between">
         <h1 className="text-3xl font-bold flex justify-start items-center">
           <Tooltip content="Back to all posts">
-            <Link href="/posts" className="font-bold">
+            <Link href="/admin/posts" className="font-bold">
               <BsArrowLeftSquareFill className="w-7 h-7 me-2" />
             </Link>
           </Tooltip>
           {post?.title}
         </h1>
-        <Button as={Link} href="/posts/add" color="default">
+        <Button as={Link} href="/admin/posts/add" color="default">
           Add New Post
         </Button>
       </div>
@@ -275,7 +271,7 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
               color="default"
               as={Link}
               className="w-full"
-              href="/posts"
+              href="/admin/posts"
               startContent={<BsArrowLeftShort />}
             >
               Back to All Posts

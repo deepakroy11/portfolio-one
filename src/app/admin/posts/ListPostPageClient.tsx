@@ -60,7 +60,7 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
             <div className="flex justify-between items-start mb-3">
               <span className="text-sm text-default-500">#{index + 1}</span>
               <div className="flex gap-2">
-                <Link href={`/posts/${post.slug}`}>
+                <Link href={`/admin/posts/${post.slug}`}>
                   <Button isIconOnly size="sm" variant="flat">
                     <BsPencilSquare className="w-4 h-4" />
                   </Button>
@@ -71,7 +71,7 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
               </div>
             </div>
             <div className="space-y-3">
-              <Link href={`/posts/${post.slug}`} color="secondary">
+              <Link href={`/admin/posts/${post.slug}`} color="secondary">
                 <h3 className="font-medium text-sm">{post.title}</h3>
               </Link>
               <p className="text-xs text-default-500 line-clamp-2">
@@ -116,7 +116,7 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
               <TableRow key={post.slug}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell className="max-w-48">
-                  <Link href={`/posts/${post.slug}`} color="secondary">
+                  <Link href={`/admin/posts/${post.slug}`} color="secondary">
                     <div className="truncate">{post.title}</div>
                   </Link>
                 </TableCell>
@@ -150,7 +150,7 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-1">
-                    <Link href={`/posts/${post.slug}`}>
+                    <Link href={`/admin/posts/${post.slug}`}>
                       <Button isIconOnly size="sm" variant="flat">
                         <BsPencilSquare className="w-4 h-4" />
                       </Button>

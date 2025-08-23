@@ -3,6 +3,7 @@ import Contact from "@/components/Contact";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
+import Header from "@/components/header/header";
 import type { Skill } from "@prisma/client";
 
 export default async function Home() {
@@ -38,19 +39,22 @@ export default async function Home() {
   }
 
   return (
-    <div>
-      <Hero basicDetails={basicDetailsData?.basicDetails} />
-      <About basicDetails={basicDetailsData?.basicDetails} />
-      <Projects projects={projectsData?.projects} />
-      {/* Debug: {JSON.stringify(projectsData)} */}
-      <Skills
-        skills={skillsData?.skills?.map((skill: Skill) => ({
-          ...skill,
-          createdAt: new Date(skill.createdAt),
-          updatedAt: new Date(skill.updatedAt),
-        }))}
-      />
-      <Contact basicDetails={basicDetailsData?.basicDetails} />
-    </div>
+    <>
+      <Header />
+      <main className="min-h-screen bg-gradient-to-br">
+        <Hero basicDetails={basicDetailsData?.basicDetails} />
+        <About basicDetails={basicDetailsData?.basicDetails} />
+        <Projects projects={projectsData?.projects} />
+        {/* Debug: {JSON.stringify(projectsData)} */}
+        <Skills
+          skills={skillsData?.skills?.map((skill: Skill) => ({
+            ...skill,
+            createdAt: new Date(skill.createdAt),
+            updatedAt: new Date(skill.updatedAt),
+          }))}
+        />
+        <Contact basicDetails={basicDetailsData?.basicDetails} />
+      </main>
+    </>
   );
 }

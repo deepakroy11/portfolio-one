@@ -40,7 +40,7 @@ export default function TaxonomyAddPage() {
     <main className="flex-1 p-8 space-y-10">
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold">Taxonomies</h1>
-        <Button href="/taxonomies/add" as={Link}>
+        <Button href="/admin/taxonomies/add" as={Link}>
           New Taxonomy
         </Button>
       </div>
@@ -64,7 +64,7 @@ export default function TaxonomyAddPage() {
               <TableCell>{index + 1}</TableCell>
               <TableCell>
                 <Tooltip content={`To add meta value click here.`}>
-                  <Link href={`taxonomies/${item.slug}`} color="foreground">
+                  <Link href={`/admin/taxonomies/${item.slug}`} color="foreground">
                     {item.name}
 
                     <BsArrowUpRightSquareFill className="w-3 h-3 ms-2" />
@@ -81,7 +81,7 @@ export default function TaxonomyAddPage() {
                     <BsEye className="w-5 h-5 text-success-900" />
                   </Link>
                   <Link
-                    href={`taxonomies/${item.slug}`}
+                    href={`/admin/taxonomies/${item.slug}`}
                     className="border-e-1 pe-2"
                   >
                     <BsPencilSquare className="w-5 h-5 text-blue-900" />

@@ -5,16 +5,17 @@ import ListPostPageClient from "./ListPostPageClient";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-const fetchPost = async (endpint: string) => {
-  const response = await fetch(`${baseUrl}/${endpint}`, { cache: "no-store" });
+const fetchPost = async (endpoint: string) => {
+  const response = await fetch(`${baseUrl}/${endpoint}`, { 
+    cache: "force-cache",
+    next: { revalidate: 300 } // 5 minutes
+  });
   const data = await response.json();
-
   return data;
 };
 
 export default async function PostsPage() {
   const [posts] = await Promise.all([fetchPost("api/post")]);
-  // console.log("Posts", posts);
 
   return (
     <main className="flex-1 p-4 sm:p-8 space-y-6 sm:space-y-10">
@@ -28,7 +29,7 @@ export default async function PostsPage() {
             </Chip>
           )}
         </h1>
-        <Button as={Link} href="/posts/add" prefetch={true} className="w-full sm:w-auto">
+        <Button as={Link} href="/admin/posts/add" prefetch={true} className="w-full sm:w-auto">
           Add New Post
         </Button>
       </div>

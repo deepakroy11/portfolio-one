@@ -20,9 +20,12 @@ export const getRecentPosts = async (limit = 5) => {
   return db.post.findMany({
     take: limit,
     orderBy: { createdAt: "desc" },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      createdAt: true,
       user: {
-        select: { name: true, email: true },
+        select: { name: true },
       },
     },
   });

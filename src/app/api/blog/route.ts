@@ -1,6 +1,7 @@
-import posts from "@/data/blog_posts.json";
-
 import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+
+const client = new PrismaClient();
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -9,33 +10,92 @@ export async function GET(request: Request) {
   const category = searchParams.get("category") || null;
   const author = searchParams.get("author") || null;
   const tag = searchParams.get("tag") || null;
-  let filteredPosts = posts;
 
-  if (category) {
-    filteredPosts = filteredPosts.filter(
-      (post) => post.category.toLowerCase() === category.toLowerCase()
+  try {
+    const where: any = {};
+    const include: any = {
+      user: {
+        select: { name: true },
+      },
+      postTaxonomies: {
+        include: {
+          taxonomyMeta: {
+            include: {
+              taxonomy: true,
+            },
+          },
+        },
+      },
+    };
+
+    // Add filters
+    if (category || tag) {
+      where.postTaxonomies = {
+        some: {
+          taxonomyMeta: {
+            ...(category && { slug: category }),
+            ...(tag && { slug: tag }),
+          },
+        },
+      };
+    }
+
+    if (author) {
+      where.user = {
+        name: {
+          contains: author,
+          mode: 'insensitive',
+        },
+      };
+    }
+
+    const [posts, total] = await Promise.all([
+      client.post.findMany({
+        where,
+        include,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      client.post.count({ where }),
+    ]);
+
+    // Transform posts to match frontend interface
+    const transformedPosts = posts.map((post) => {
+      const categories = post.postTaxonomies
+        .filter(pt => pt.taxonomyMeta?.taxonomy?.slug === 'category')
+        .map(pt => pt.taxonomyMeta?.name)
+        .filter(Boolean);
+      
+      const tags = post.postTaxonomies
+        .filter(pt => pt.taxonomyMeta?.taxonomy?.slug === 'tags')
+        .map(pt => pt.taxonomyMeta?.name)
+        .filter(Boolean);
+
+      return {
+        slug: post.slug,
+        title: post.title,
+        description: post.summary,
+        summary: post.summary,
+        date: post.date?.toISOString() || post.createdAt.toISOString(),
+        image: post.image,
+        category: categories[0] || 'Uncategorized',
+        tags: tags,
+        author: post.user?.name || 'Unknown',
+      };
+    });
+
+    return NextResponse.json({
+      total,
+      limit,
+      skip,
+      posts: transformedPosts,
+    });
+  } catch (error) {
+    console.error('Blog API error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch posts' },
+      { status: 500 }
     );
   }
-
-  if (author) {
-    filteredPosts = filteredPosts.filter(
-      (post) =>
-        post.author && post.author.toLowerCase() === author.toLowerCase()
-    );
-  }
-
-  if (tag) {
-    filteredPosts = filteredPosts.filter(
-      (post) => post.tags && post.tags.includes(tag)
-    );
-  }
-
-  const paginatedPosts = filteredPosts.slice(skip, skip + limit);
-
-  return NextResponse.json({
-    total: filteredPosts.length,
-    limit,
-    skip,
-    posts: paginatedPosts,
-  });
 }

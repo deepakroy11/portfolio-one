@@ -14,6 +14,7 @@ import {
 
 import { FormEvent, useRef, useState } from "react";
 import { BsArrowLeftShort } from "react-icons/bs";
+import CKEditorComponent from "@/components/Editor/CKEditor";
 
 interface TaxonomyMeta {
   id: string;
@@ -29,11 +30,15 @@ interface PostPageClientProps {
 
 const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
   const [postSaving, setPostSaving] = useState(false);
-  const [selectedTags, setSelectedTags] = useState("");
-  const [name, setName] = useState("");
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
+  const [selectedCategory, setSelectedCategory] = useState<Set<string>>(new Set());
+  const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
+  const [summary, setSummary] = useState("");
+  const [editorData, setEditorData] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -45,30 +50,40 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
   const handleFileChang = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
   };
 
-  const handleTagChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTags(event.target.value);
+  const handleEditorChange = (content: string) => {
+    setEditorData(content);
   };
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value;
-    setName(name);
-    setSlug(name.toLocaleLowerCase().trim().replace(/\s+/g, "-"));
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const titleValue = event.target.value;
+    setTitle(titleValue);
+    setSlug(titleValue.toLowerCase().trim().replace(/\s+/g, "-"));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setPostSaving(true);
 
-    const formData = new FormData(event.currentTarget);
-    formData.append("tagsId", selectedTags);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("slug", slug);
+    formData.append("summary", summary);
+    formData.append("content", editorData);
+    formData.append("categoryId", Array.from(selectedCategory)[0] || "");
+    formData.append("tagsId", Array.from(selectedTags).join(","));
+    
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
 
-    const response = await fetch("/api/admin/post", {
+    const response = await fetch("/api/post", {
       method: "POST",
-      body: formData, // Send as FormData instead of JSON
+      body: formData,
     });
     const result = await response.json();
     if (response.ok) {
@@ -77,10 +92,14 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
       setPostSaving(false);
 
       //Reset form
-      formRef.current?.reset();
-      setName("");
+      setTitle("");
       setSlug("");
-      setSelectedTags("");
+      setSummary("");
+      setEditorData("");
+      setSelectedTags(new Set());
+      setSelectedCategory(new Set());
+      setImagePreview("");
+      setImageFile(null);
     } else {
       setError(result.error || "Something went wrong...");
       setTimeout(() => setError(null), 3000);
@@ -92,7 +111,7 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
     <main className="flex-1 p-8 space-y-10">
       <div className="w-full max-w-4xl flex justify-between">
         <h1 className="text-3xl font-bold">Add Post</h1>
-        <Button color="default" as={Link} href="/posts" size="sm">
+        <Button color="default" as={Link} href="/admin/posts" size="sm">
           Back
         </Button>
       </div>
@@ -100,28 +119,39 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
       <section className="w-full">
         <Form
           ref={formRef}
-          className="max-w-2xl space-y-4"
+          className="w-full max-w-4xl flex flex-col space-y-4 gap-4"
           onSubmit={handleSubmit}
         >
-          <Input
-            name="title"
-            label="Title"
-            labelPlacement="outside"
-            placeholder="Enter post title"
-            value={name}
-            onChange={handleNameChange}
-            isRequired
-          />
-          <Input
-            name="slug"
-            label="Slug"
-            labelPlacement="outside"
-            placeholder="Enter post slug"
-            value={slug}
-            isRequired
-          />
-
-          <div className="w-full flex justify-start items-center bg-default-100 rounded-2xl p-2 py-4 space-x-2">
+          <div className="w-full flex flex-row gap-2">
+            <div className="basis-1/2">
+              <Input
+                isRequired
+                errorMessage="Please enter a valid title"
+                label="Title"
+                labelPlacement="outside"
+                name="title"
+                placeholder="Enter your title"
+                type="text"
+                value={title}
+                onChange={handleTitleChange}
+              />
+            </div>
+            <div className="basis-1/2">
+              <Input
+                isRequired
+                errorMessage="Please enter a valid slug"
+                label="Slug"
+                labelPlacement="outside"
+                name="slug"
+                placeholder="Enter your slug"
+                type="text"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+              />
+            </div>
+          </div>
+          
+          <div className="w-full flex justify-start items-center bg-primary-100 p-2 rounded-2xl space-x-6 space-y-2">
             <Button
               type="button"
               onPress={handleClick}
@@ -134,7 +164,7 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
               <Image
                 src={imagePreview}
                 alt="Preview"
-                className="w-64 h-auto rounded-2xl shadow"
+                className="mt-2 w-64 h-auto rounded-2xl shadow"
                 width={300}
               />
             )}
@@ -149,39 +179,56 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
             />
           </div>
 
-          <Textarea
-            name="summary"
-            label="Summary"
-            labelPlacement="outside"
-            isRequired
-          />
-          <Textarea
-            name="content"
-            label="Post Content"
-            labelPlacement="outside"
-            isRequired
-          />
+          <div className="w-full">
+            <Textarea
+              isRequired
+              errorMessage="Please enter a valid summary"
+              label="Summary"
+              labelPlacement="outside"
+              name="summary"
+              placeholder="Enter post summary"
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+            />
+          </div>
+          
+          <div className="w-full">
+            <h1 className="text-small">Content</h1>
+            <CKEditorComponent
+              content={""}
+              onChange={handleEditorChange}
+            />
+          </div>
+
           <div className="w-full flex flex-row gap-2">
             <Select
-              name="categoryId"
-              placeholder="Select a category"
+              name="category"
+              className="w-full"
               label="Category"
               labelPlacement="outside"
               selectionMode="single"
+              selectedKeys={selectedCategory}
               isRequired
+              onSelectionChange={(keys) =>
+                setSelectedCategory(new Set(keys as string))
+              }
             >
               {(categories ?? []).map((category) => (
                 <SelectItem key={category.id}>{category.name}</SelectItem>
               ))}
             </Select>
             <Select
-              name="tagsId"
-              label="Tags"
+              name="tags"
+              className="w-full"
               labelPlacement="outside"
+              label="Tags"
               placeholder="Select tags"
               selectionMode="multiple"
-              onChange={handleTagChange}
+              selectedKeys={selectedTags}
               isRequired
+              onSelectionChange={(keys) =>
+                setSelectedTags(new Set(keys as string))
+              }
             >
               {(tags ?? []).map((tag) => (
                 <SelectItem key={tag.id}>{tag.name}</SelectItem>
@@ -207,7 +254,7 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
               color="default"
               as={Link}
               className="w-full"
-              href="/posts"
+              href="/admin/posts"
               startContent={<BsArrowLeftShort />}
             >
               Back to All Posts

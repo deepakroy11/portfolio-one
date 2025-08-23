@@ -10,6 +10,9 @@ import {
   Image,
 } from "@heroui/react";
 import Markdown from "react-markdown";
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
+import 'highlight.js/styles/github.css';
 
 import { useParams } from "next/navigation";
 import type { PostProps } from "@/app/blog/BlogPage";
@@ -95,8 +98,42 @@ const BlogSingle = () => {
               {post?.date}
             </p>
 
-            <div className="mt-6 prose prose-lg max-w-none">
-              <Markdown>{post?.description?.replace(/\\n/g, "\n")}</Markdown>
+            <div className="mt-6 prose prose-lg max-w-none markdown-content">
+              <Markdown 
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight]}
+                components={{
+                  code: ({children, ...props}) => (
+                    <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono" {...props}>
+                      {children}
+                    </code>
+                  ),
+                  pre: ({children}) => (
+                    <pre className="bg-gray-100 p-4 rounded overflow-x-auto">
+                      {children}
+                    </pre>
+                  ),
+                  h1: ({children}) => <h1 className="text-3xl font-bold mb-4">{children}</h1>,
+                  h2: ({children}) => <h2 className="text-2xl font-bold mb-3">{children}</h2>,
+                  h3: ({children}) => <h3 className="text-xl font-bold mb-2">{children}</h3>,
+                  p: ({children}) => <p className="mb-4 leading-relaxed">{children}</p>,
+                  strong: ({children}) => <strong className="font-bold">{children}</strong>,
+                  em: ({children}) => <em className="italic">{children}</em>,
+                  ul: ({children}) => <ul className="list-disc pl-6 mb-4">{children}</ul>,
+                  ol: ({children}) => <ol className="list-decimal pl-6 mb-4">{children}</ol>,
+                  li: ({children}) => <li className="mb-1">{children}</li>,
+                  blockquote: ({children}) => <blockquote className="border-l-4 border-gray-300 pl-4 italic mb-4">{children}</blockquote>,
+                  img: ({src, alt}) => (
+                    <img 
+                      src={src} 
+                      alt={alt || 'Image'} 
+                      className="max-w-full h-auto rounded-lg shadow-md my-4"
+                    />
+                  ),
+                }}
+              >
+                {(post?.content || post?.description)?.replace(/\*\*\*\*/g, '**')}
+              </Markdown>
             </div>
           </div>
         </>

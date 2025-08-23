@@ -13,6 +13,7 @@ export interface PostProps {
   title: string;
   description: string;
   summary: string;
+  content?: string;
   date: string;
   image: string;
   category: string;

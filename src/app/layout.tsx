@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { HeroUIProvider } from "@heroui/react";
 import Header from "@/components/header/header";
-import { headers } from "next/headers";
+
 import { ThemeProvider } from "@/context/themeProvider";
 import StructuredData from "@/components/StructuredData";
 
@@ -88,15 +88,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = await headers();
-  const pathname = headersList.get('x-pathname') || '';
-  const isAdminRoute = pathname.startsWith('/admin');
-
   return (
     <html lang="en" className="light">
       <head>
@@ -108,11 +104,11 @@ export default async function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning={true}
       >
         <HeroUIProvider>
           <ThemeProvider>
-            {!isAdminRoute && <Header />}
-            <main className={isAdminRoute ? "" : "min-h-screen bg-gradient-to-br"}>{children}</main>
+            {children}
           </ThemeProvider>
         </HeroUIProvider>
       </body>
