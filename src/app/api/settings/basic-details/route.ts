@@ -5,7 +5,7 @@ const client = new PrismaClient();
 
 export async function GET() {
   try {
-    const basicDetails = await client.basicDetail.findFirst();
+    const basicDetails = await client.basicDetails.findFirst();
     return NextResponse.json({ success: true, basicDetails });
   } catch (error: unknown) {
     if (error instanceof Error) {

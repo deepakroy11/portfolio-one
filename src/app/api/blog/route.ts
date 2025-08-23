@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 
   try {
     const where: any = {};
-    const include: any = {
+    const include = {
       user: {
         select: { name: true },
       },
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
           },
         },
       },
-    };
+    } as const;
 
     // Add filters
     if (category || tag) {
@@ -61,15 +61,15 @@ export async function GET(request: Request) {
     ]);
 
     // Transform posts to match frontend interface
-    const transformedPosts = posts.map((post) => {
+    const transformedPosts = posts.map((post: any) => {
       const categories = post.postTaxonomies
-        .filter(pt => pt.taxonomyMeta?.taxonomy?.slug === 'category')
-        .map(pt => pt.taxonomyMeta?.name)
+        .filter((pt: any) => pt.taxonomyMeta?.taxonomy?.slug === 'category')
+        .map((pt: any) => pt.taxonomyMeta?.name)
         .filter(Boolean);
       
       const tags = post.postTaxonomies
-        .filter(pt => pt.taxonomyMeta?.taxonomy?.slug === 'tags')
-        .map(pt => pt.taxonomyMeta?.name)
+        .filter((pt: any) => pt.taxonomyMeta?.taxonomy?.slug === 'tags')
+        .map((pt: any) => pt.taxonomyMeta?.name)
         .filter(Boolean);
 
       return {

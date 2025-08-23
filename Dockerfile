@@ -8,7 +8,7 @@ RUN npm ci
 
 # Copy Prisma schema and generate client
 COPY prisma ./prisma
-RUN npx prisma generate
+RUN npx prisma generate --no-engine
 
 # Copy rest of the source code
 COPY . .
@@ -44,4 +44,4 @@ RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
 USER nextjs
 
 # Final startup command
-CMD npx prisma generate && npx prisma migrate deploy && npm run start
+CMD npx prisma generate --no-engine && npx prisma migrate deploy && npm run start
