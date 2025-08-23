@@ -11,7 +11,6 @@ const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const AUTH_SECRET = process.env.AUTH_SECRET;
-const NEXTAUTH_URL = process.env.NEXTAUTH_URL || process.env.VERCEL_URL;
 
 if (!AUTH_SECRET) {
   throw new Error("AUTH_SECRET is required");
@@ -28,23 +27,23 @@ if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
-    GitHub({ 
-      clientId: GITHUB_CLIENT_ID, 
+    GitHub({
+      clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
       authorization: {
         params: {
-          scope: "read:user user:email"
-        }
-      }
+          scope: "read:user user:email",
+        },
+      },
     }),
-    Google({ 
-      clientId: GOOGLE_CLIENT_ID, 
+    Google({
+      clientId: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
-          scope: "openid email profile"
-        }
-      }
+          scope: "openid email profile",
+        },
+      },
     }),
   ],
   session: {

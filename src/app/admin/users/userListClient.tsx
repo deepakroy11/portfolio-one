@@ -39,7 +39,6 @@ interface UsersProps {
 }
 
 const UserListClient = ({ users }: UsersProps) => {
-  console.log(users);
   return (
     <Table>
       <TableHeader>
@@ -69,13 +68,16 @@ const UserListClient = ({ users }: UsersProps) => {
             <TableCell>
               <div className="flex justify-start items-center space-x-2">
                 {user.accounts && user.accounts.length > 0
-                  ? user.accounts.map((acc) =>
+                  ? user.accounts.map((acc, index) =>
                       acc.provider == "google" ? (
-                        <BsGoogle className="h-5 w-5" />
+                        <BsGoogle key={index} className="h-5 w-5" />
                       ) : acc.provider == "github" ? (
-                        <BsGithub className="h-5 w-5" />
+                        <BsGithub key={index} className="h-5 w-5" />
                       ) : (
-                        <BsGlobeCentralSouthAsia className="h-5 w-5" />
+                        <BsGlobeCentralSouthAsia
+                          key={index}
+                          className="h-5 w-5"
+                        />
                       )
                     )
                   : "None"}

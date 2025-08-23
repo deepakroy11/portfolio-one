@@ -2,7 +2,7 @@
 
 import { Button, Input, Form, Alert } from "@heroui/react";
 import { createTaxonomy } from "@/actions/create-taxonomy";
-import { FormEvent, useActionState, useState } from "react";
+import { useActionState, useState } from "react";
 
 export default function TaxonomyAddPage() {
   const [formState, formAction, isLoading] = useActionState(createTaxonomy, {

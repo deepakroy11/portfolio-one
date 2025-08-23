@@ -1,9 +1,8 @@
 "use client";
 
-import { Input, Button, Card, CardBody, Divider } from "@heroui/react";
+import { Button, Card, CardBody, Divider } from "@heroui/react";
 import { signIn } from "next-auth/react";
-import { BsGoogle, BsGithub, BsKeyFill } from "react-icons/bs";
-import { DiverWithText } from "@/components/common/DividerWithText";
+import { BsGoogle, BsGithub } from "react-icons/bs";
 
 export default function LoginPage() {
   return (
@@ -47,14 +46,18 @@ export default function LoginPage() {
             <Button
               className="w-full"
               startContent={<BsGithub className="w-5 h-5" />}
-              onPress={() => signIn("github", { callbackUrl: "/admin/dashboard" })}
+              onPress={() =>
+                signIn("github", { callbackUrl: "/admin/dashboard" })
+              }
             >
               Sign in with GitHub
             </Button>
             <Button
               className="w-full"
               startContent={<BsGoogle className="w-5 h-5" />}
-              onPress={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
+              onPress={() =>
+                signIn("google", { callbackUrl: "/admin/dashboard" })
+              }
             >
               Sign in with Google
             </Button>

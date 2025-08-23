@@ -149,7 +149,7 @@ export async function PUT(req: NextRequest) {
     });
 
     // Remove existing PostTaxonomy relations
-    const status = await client.postTaxonomy.deleteMany({
+    await client.postTaxonomy.deleteMany({
       where: { postId: String(postId) },
     });
 

@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
   title: "Deepak Roy | Full-Stack Web Developer & Software Engineer",
   description:
     "Portfolio of Deepak Roy, a full-stack web developer specializing in Next.js, React, Node.js, and scalable modern solutions. Passionate about optimizing workflows and building seamless user experiences.",

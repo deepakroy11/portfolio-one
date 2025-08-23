@@ -25,7 +25,6 @@ export async function GET() {
       { status: 500 }
     );
   }
-  return NextResponse.json({ success: true, message: "Working on it" });
 }
 
 export async function POST(req: NextRequest) {
@@ -166,7 +165,7 @@ export async function DELETE(req: NextRequest) {
 
   if (id) {
     try {
-      const response = await client.skill.delete({ where: { id } });
+      await client.skill.delete({ where: { id } });
       return NextResponse.json({
         success: true,
         id: id,

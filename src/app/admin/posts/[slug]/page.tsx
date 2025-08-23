@@ -1,6 +1,3 @@
-import { useParams } from "next/navigation";
-
-import PostFormSkeleton from "@/components/skeltons/PostFormSkelton";
 import EditPostPageClient from "./EditPostPageClient";
 
 export const dynamic = "force-dynamic";

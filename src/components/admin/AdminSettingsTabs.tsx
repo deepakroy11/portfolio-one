@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, Tab, Card, CardBody } from "@heroui/react";
+import { Tabs, Tab } from "@heroui/react";
 import AdminBasicDetails from "@/components/admin/AdminBasicDetails";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
@@ -38,7 +38,7 @@ export default function AdminSettingsTabs({
       </Tab>
 
       <Tab key="projects" title="Projects">
-        <Projects projects={projects} skills={skills} />
+        <Projects projects={projects} />
       </Tab>
     </Tabs>
   );

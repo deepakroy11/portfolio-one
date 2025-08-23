@@ -3,35 +3,65 @@ import { PrismaClient } from "@prisma/client";
 import path from "path";
 import fs from "fs";
 import { writeFile } from "fs/promises";
-import { revalidatePath } from "next/cache";
-import { form, image } from "@heroui/react";
 
 const client = new PrismaClient();
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-const defaulProjectImage = `${baseUrl}/uploads/place-holder-logo.svg`;
+const defaultProjectImage = `${baseUrl}/uploads/place-holder-logo.svg`;
 
+type ProjectUpdateData = {
+  title?: string;
+  summary?: string;
+  link?: string;
+  image?: string | null;
+};
+
+// ---------- GET all projects ----------
 export async function GET() {
   try {
     const projects = await client.project.findMany({
-      include: {
-        skills: true,
-      },
+      include: { skills: true },
     });
+
     return NextResponse.json({ success: true, projects });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { success: false, error: error.message },
-        { status: 500 }
-      );
-    }
     return NextResponse.json(
-      { success: false, error: "Something went wrong..." },
+      {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Something went wrong...",
+      },
       { status: 500 }
     );
   }
 }
 
+// ---------- File Upload Helper ----------
+async function uploadFile(file: File | null): Promise<string | null> {
+  if (!file || file.size === 0) return null;
+
+  try {
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const uploadDir = path.join(process.cwd(), "public", "uploads", "projects");
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const fileName = `${Date.now()}-${file.name}`;
+    const filePath = path.join(uploadDir, fileName);
+
+    await writeFile(filePath, buffer);
+
+    return `/uploads/projects/${fileName}`; // relative path (public/)
+  } catch (error) {
+    console.error("File upload failed:", error);
+    throw new Error(`Failed to upload file: ${file?.name}`);
+  }
+}
+
+// ---------- CREATE project ----------
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
 
@@ -41,96 +71,50 @@ export async function POST(req: NextRequest) {
   const skillSet = formData.get("skillSet") as string;
   const image = formData.get("projectImage") as File | null;
 
-  const data = {
-    title,
-    summary,
-    link,
-    image: defaulProjectImage, // default initially
-  };
   const skillIds = (skillSet || "")
     .split(",")
     .map((id) => id.trim())
-    .filter(Boolean); // removes empty entries
+    .filter(Boolean);
 
-  // Validate that it's a non-empty array
-  if (
-    !Array.isArray(skillIds) ||
-    skillIds.some((id) => typeof id !== "string")
-  ) {
+  if (!Array.isArray(skillIds)) {
     return NextResponse.json(
       { success: false, message: "Invalid skill set" },
       { status: 400 }
     );
   }
 
-  const uploadFile = async (file: File) => {
-    if (!file) return "https://picsum.photos/1120/400";
-    try {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const uploadDir = path.join(
-        process.cwd(),
-        "public",
-        "uploads",
-        "projects"
-      );
-
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      const file_name = Date.now() + "-" + file.name;
-      const filePath = path.join(uploadDir, file_name);
-      await writeFile(filePath, buffer);
-      return `uploads/projects/${file_name}`;
-    } catch (error) {
-      console.error("File upload failed:", error);
-      throw new Error(`Failed to upload file: ${file?.name}`);
-    }
-  };
-
-  if (image && image.name !== "" && image.size > 0) {
-    const imageUrl = await uploadFile(image);
-    data.image = imageUrl;
-  }
+  let imageUrl = await uploadFile(image);
+  if (!imageUrl) imageUrl = defaultProjectImage;
 
   try {
     const project = await client.project.create({
       data: {
-        ...data,
+        title,
+        summary,
+        link,
+        image: imageUrl,
         skills: { connect: skillIds.map((id) => ({ id })) },
       },
     });
+
     return NextResponse.json({ success: true, project });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: error.message,
-        },
-        { status: 500 }
-      );
-    }
     return NextResponse.json(
       {
-        success: true,
-        error: "Something went wrong...",
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Something went wrong...",
       },
       { status: 500 }
     );
   }
 }
 
+// ---------- UPDATE project ----------
 export async function PUT(req: NextRequest) {
   const formData = await req.formData();
 
-  const title = formData.get("project-title") as string;
-  const summary = formData.get("project-summary") as string;
-  const link = formData.get("project-link") as string;
-  const skillSet = formData.get("skillSet") as string;
-  const image = formData.get("projectImage") as File | null;
   const id = formData.get("id") as string;
-
   if (!id) {
     return NextResponse.json(
       { success: false, message: "Project ID is required" },
@@ -138,16 +122,25 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  const data: any = {
-    title,
-    summary,
-    link,
-  };
+  const title = formData.get("project-title") as string;
+  const summary = formData.get("project-summary") as string;
+  const link = formData.get("project-link") as string;
+  const skillSet = formData.get("skillSet") as string;
+  const image = formData.get("projectImage") as File | null;
+
+  const data: ProjectUpdateData = { title, summary, link };
+
+  if (image && image.size > 0) {
+    const uploadedImage = await uploadFile(image);
+    if (uploadedImage) {
+      data.image = uploadedImage;
+    }
+  }
 
   let skillIds: string[] = [];
   if (skillSet) {
     try {
-      skillIds = JSON.parse(skillSet);
+      skillIds = JSON.parse(skillSet) as string[];
     } catch {
       return NextResponse.json(
         { success: false, message: "Invalid skill set format" },
@@ -156,67 +149,38 @@ export async function PUT(req: NextRequest) {
     }
   }
 
-  const uploadFile = async (file: File) => {
-    if (!file) return null;
-    try {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const uploadDir = path.join(
-        process.cwd(),
-        "public",
-        "uploads",
-        "projects"
-      );
-
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      const file_name = Date.now() + "-" + file.name;
-      const filePath = path.join(uploadDir, file_name);
-      await writeFile(filePath, buffer);
-      return `uploads/projects/${file_name}`;
-    } catch (error) {
-      console.error("File upload failed:", error);
-      throw new Error(`Failed to upload file: ${file?.name}`);
-    }
-  };
-
-  if (image && image.name !== "" && image.size > 0) {
-    const imageUrl = await uploadFile(image);
-    data.image = imageUrl;
-  }
-
   try {
+    const updateData = Object.fromEntries(
+      Object.entries(data).filter(
+        ([, value]) => value !== null && value !== undefined
+      )
+    );
+
     const project = await client.project.update({
       where: { id },
       data: {
-        ...data,
+        ...updateData,
         skills: {
-          set: skillIds.map((skillId) => ({ id: skillId })),
+          set: [], // clear old relations
+          connect: skillIds.map((skillId) => ({ id: skillId })), // re-connect new ones
         },
       },
     });
+
     return NextResponse.json({ success: true, project });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: error.message,
-        },
-        { status: 500 }
-      );
-    }
     return NextResponse.json(
       {
         success: false,
-        error: "Something went wrong...",
+        error:
+          error instanceof Error ? error.message : "Something went wrong...",
       },
       { status: 500 }
     );
   }
 }
 
+// ---------- DELETE project ----------
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
@@ -229,27 +193,18 @@ export async function DELETE(req: NextRequest) {
   }
 
   try {
-    await client.project.delete({
-      where: { id },
-    });
+    await client.project.delete({ where: { id } });
+
     return NextResponse.json({
       success: true,
       message: "Project deleted successfully",
     });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: error.message,
-        },
-        { status: 500 }
-      );
-    }
     return NextResponse.json(
       {
         success: false,
-        error: "Something went wrong...",
+        error:
+          error instanceof Error ? error.message : "Something went wrong...",
       },
       { status: 500 }
     );

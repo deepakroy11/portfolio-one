@@ -12,7 +12,7 @@ import {
   Image,
 } from "@heroui/react";
 
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { BsArrowLeftShort } from "react-icons/bs";
 
 interface TaxonomyMeta {
@@ -66,7 +66,7 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
     const formData = new FormData(event.currentTarget);
     formData.append("tagsId", selectedTags);
 
-    const response = await fetch("/api/post", {
+    const response = await fetch("/api/admin/post", {
       method: "POST",
       body: formData, // Send as FormData instead of JSON
     });

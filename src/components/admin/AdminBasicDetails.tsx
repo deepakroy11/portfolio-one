@@ -104,11 +104,20 @@ const AdminBasicDetails = ({ details }: { details: BasicDetails }) => {
         isRequired
       />
       <div className="w-full flex flex-col sm:flex-row justify-start items-center space-y-2 sm:space-y-0 sm:space-x-4 rounded-2xl p-3 sm:p-4 bg-primary-50">
-        <Button onPress={profileImgBtnChange} size="sm" className="w-full sm:w-auto">
+        <Button
+          onPress={profileImgBtnChange}
+          size="sm"
+          className="w-full sm:w-auto"
+        >
           Upload Profile Image
         </Button>
         {details.profileImage != "" && (
-          <Image src={profileImgPreview} className="w-full sm:w-24 max-w-24" isBlurred />
+          <Image
+            src={profileImgPreview}
+            className="w-full sm:w-24 max-w-24"
+            alt="Profile Image"
+            isBlurred
+          />
         )}
         <Input
           type="file"
@@ -130,11 +139,20 @@ const AdminBasicDetails = ({ details }: { details: BasicDetails }) => {
       />
 
       <div className="w-full flex flex-col sm:flex-row justify-start items-center space-y-2 sm:space-y-0 sm:space-x-4 rounded-2xl p-3 sm:p-4 bg-primary-50">
-        <Button onPress={aboutMeImgBtnChange} size="sm" className="w-full sm:w-auto">
+        <Button
+          onPress={aboutMeImgBtnChange}
+          size="sm"
+          className="w-full sm:w-auto"
+        >
           Upload About Me Image
         </Button>
         {details.aboutMeImage != "" && (
-          <Image src={aboutMeImgPreview} className="w-full sm:w-48 max-w-48" isBlurred />
+          <Image
+            src={aboutMeImgPreview}
+            className="w-full sm:w-48 max-w-48"
+            alt="About Me Image"
+            isBlurred
+          />
         )}
         <Input
           type="file"

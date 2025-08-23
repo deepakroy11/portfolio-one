@@ -1,6 +1,5 @@
 "use server";
 import { signIn as authSignIn } from "@/auth";
-import { redirect } from "next/navigation";
 
 export async function signIn(provider: string) {
   try {

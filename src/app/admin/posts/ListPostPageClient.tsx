@@ -44,16 +44,19 @@ interface IncomingDataProps {
 }
 
 const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
-  const { success, posts, error } = data;
-  // console.log(error);
+  const { posts, error } = data;
+
   return (
     <>
       {error && <Alert color="danger" title={error} className="mb-2" />}
-      
+
       {/* Mobile Card View */}
       <div className="block lg:hidden space-y-4">
         {(posts ?? []).map((post, index) => (
-          <div key={post.slug} className="bg-content1 rounded-lg p-4 shadow-sm border">
+          <div
+            key={post.slug}
+            className="bg-content1 rounded-lg p-4 shadow-sm border"
+          >
             <div className="flex justify-between items-start mb-3">
               <span className="text-sm text-default-500">#{index + 1}</span>
               <div className="flex gap-2">
@@ -71,17 +74,23 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
               <Link href={`/posts/${post.slug}`} color="secondary">
                 <h3 className="font-medium text-sm">{post.title}</h3>
               </Link>
-              <p className="text-xs text-default-500 line-clamp-2">{post.summary}</p>
+              <p className="text-xs text-default-500 line-clamp-2">
+                {post.summary}
+              </p>
               <div className="flex items-center gap-2">
                 <Avatar size="sm" name={post.user.name} src={post.user.image} />
                 <span className="text-xs">{post.user.name}</span>
               </div>
               <div className="flex flex-wrap gap-1">
                 {post.category.map((cat) => (
-                  <Chip key={cat.id} size="sm">{cat.name}</Chip>
+                  <Chip key={cat.id} size="sm">
+                    {cat.name}
+                  </Chip>
                 ))}
                 {post.tags.map((tag) => (
-                  <Chip key={tag.id} size="sm" variant="flat">{tag.name}</Chip>
+                  <Chip key={tag.id} size="sm" variant="flat">
+                    {tag.name}
+                  </Chip>
                 ))}
               </div>
             </div>
@@ -115,7 +124,9 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
                   <div className="truncate max-w-xs">{post.summary}</div>
                 </TableCell>
                 <TableCell>
-                  <Chip size="sm">{post.category.map((cat) => cat.name).join(",")}</Chip>
+                  <Chip size="sm">
+                    {post.category.map((cat) => cat.name).join(",")}
+                  </Chip>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-start gap-2">
@@ -131,7 +142,9 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
                 <TableCell>
                   <div className="flex flex-wrap gap-1">
                     {post.tags.map((tag) => (
-                      <Chip key={tag.id} size="sm" variant="flat">{tag.name}</Chip>
+                      <Chip key={tag.id} size="sm" variant="flat">
+                        {tag.name}
+                      </Chip>
                     ))}
                   </div>
                 </TableCell>

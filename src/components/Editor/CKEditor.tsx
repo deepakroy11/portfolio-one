@@ -1,16 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import "./editor.css";
+
+type EditorInstance = {
+  getData: () => string;
+};
+
+interface CKEditorComponentProps {
+  content: string;
+  onChange: (event: unknown, editor: EditorInstance) => void;
+}
 
 export default function CKEditorComponent({
   content,
   onChange,
-}: {
-  content: string;
-  onChange: (event: any, editor: any) => void;
-}) {
+}: CKEditorComponentProps) {
   const [EditorLoaded, setEditorLoaded] = useState(false);
   const [CKEditor, setCKEditor] = useState<any>(null);
   const [ClassicEditor, setClassicEditor] = useState<any>(null);

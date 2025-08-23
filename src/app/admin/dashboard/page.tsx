@@ -1,5 +1,9 @@
-import { Card, CardHeader, CardBody } from "@heroui/react";
-import { getDashboardStats, getRecentPosts, getRecentUsers } from "@/db/queries/dashboard";
+import { Card, CardBody } from "@heroui/react";
+import {
+  getDashboardStats,
+  getRecentPosts,
+  getRecentUsers,
+} from "@/db/queries/dashboard";
 import { BsFileText, BsPeople, BsTags, BsFolder } from "react-icons/bs";
 
 export default async function DashboardPage() {
@@ -35,7 +39,7 @@ export default async function DashboardPage() {
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-default-500 mt-1">
-          Welcome back! Here's an overview of your portfolio.
+          Welcome back! Here&apos;s an overview of your portfolio.
         </p>
       </div>
 
@@ -66,7 +70,10 @@ export default async function DashboardPage() {
               {recentPosts.length > 0 ? (
                 <div className="space-y-4">
                   {recentPosts.map((post) => (
-                    <div key={post.id} className="flex justify-between items-start">
+                    <div
+                      key={post.id}
+                      className="flex justify-between items-start"
+                    >
                       <div>
                         <h3 className="font-medium">{post.title}</h3>
                         <p className="text-sm text-default-500">
@@ -93,9 +100,14 @@ export default async function DashboardPage() {
               {recentUsers.length > 0 ? (
                 <div className="space-y-4">
                   {recentUsers.map((user) => (
-                    <div key={user.id} className="flex justify-between items-center">
+                    <div
+                      key={user.id}
+                      className="flex justify-between items-center"
+                    >
                       <div>
-                        <h3 className="font-medium">{user.name || "Unnamed User"}</h3>
+                        <h3 className="font-medium">
+                          {user.name || "Unnamed User"}
+                        </h3>
                         <p className="text-sm text-default-500">{user.email}</p>
                       </div>
                       <span className="text-xs text-default-400">

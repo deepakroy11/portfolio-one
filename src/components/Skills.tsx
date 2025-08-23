@@ -5,19 +5,12 @@ type SkillsProps = {
   title: string;
   summary: string;
   image: string;
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export default function Skills({ skills }: { skills?: SkillsProps[] }) {
-  const defaultSkills: SkillsProps[] = [
-    { id: "1", title: "React", summary: "", image: "", createdAt: "", updatedAt: "" },
-    { id: "2", title: "Next.js", summary: "", image: "", createdAt: "", updatedAt: "" },
-    { id: "3", title: "TypeScript", summary: "", image: "", createdAt: "", updatedAt: "" },
-    { id: "4", title: "Node.js", summary: "", image: "", createdAt: "", updatedAt: "" },
-  ];
-
-  const skillList = skills && skills.length > 0 ? skills : defaultSkills;
+  const skillList = skills ?? [];
 
   return (
     <section id="skills" className="py-24 px-6 ">

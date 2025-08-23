@@ -12,7 +12,7 @@ import {
   Alert,
   Image,
 } from "@heroui/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { BsArrowLeftSquareFill, BsArrowLeftShort } from "react-icons/bs";
 import CKEditorComponent from "@/components/Editor/CKEditor";
 
@@ -68,7 +68,10 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleEditorChange = (event: any, editor: any) => {
+  const handleEditorChange = (
+    event: unknown,
+    editor: { getData: () => string }
+  ) => {
     const data = editor.getData();
     setEditorData(data);
   };
@@ -103,7 +106,7 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
       formData.append("image", imageFile);
     }
 
-    const response = await fetch(`/api/post/${post.slug}`, {
+    const response = await fetch(`/api/admin/post/${post.slug}`, {
       method: "PUT",
       body: formData,
     });
