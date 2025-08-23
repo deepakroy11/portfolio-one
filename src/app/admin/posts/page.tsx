@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import ListPostPageClient from "./ListPostPageClient";
 
 export default function PostsPage() {
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
