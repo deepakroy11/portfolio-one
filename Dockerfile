@@ -2,13 +2,16 @@
 FROM node:18-slim AS builder
 WORKDIR /app
 
+# Install OpenSSL and other dependencies
+RUN apt-get update -y && apt-get install -y openssl
+
 # Install dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci
 
 # Copy Prisma schema and generate client
 COPY prisma ./prisma
-RUN npx prisma generate --no-engine
+RUN npx prisma generate
 
 # Copy rest of the source code
 COPY . .
@@ -19,6 +22,9 @@ RUN npm run build
 # Stage 2: Production runtime
 FROM node:18-slim AS runner
 WORKDIR /app
+
+# Install OpenSSL for production
+RUN apt-get update -y && apt-get install -y openssl
 
 # Install only production dependencies
 COPY package.json package-lock.json* ./
@@ -44,4 +50,4 @@ RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
 USER nextjs
 
 # Final startup command
-CMD npx prisma generate --no-engine && npx prisma migrate deploy && npm run start
+CMD npx prisma generate && npx prisma migrate deploy && npm run start

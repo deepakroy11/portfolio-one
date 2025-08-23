@@ -1,21 +1,37 @@
-import { Button, Chip } from "@heroui/react";
+"use client";
 
+import { Button, Chip } from "@heroui/react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import ListPostPageClient from "./ListPostPageClient";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+export default function PostsPage() {
+  const [posts, setPosts] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const fetchPost = async (endpoint: string) => {
-  const response = await fetch(`${baseUrl}/${endpoint}`, { 
-    cache: "force-cache",
-    next: { revalidate: 300 } // 5 minutes
-  });
-  const data = await response.json();
-  return data;
-};
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("/api/post");
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-export default async function PostsPage() {
-  const [posts] = await Promise.all([fetchPost("api/post")]);
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="flex-1 p-4 sm:p-8 space-y-6 sm:space-y-10">
+        <div>Loading...</div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex-1 p-4 sm:p-8 space-y-6 sm:space-y-10">
@@ -25,7 +41,7 @@ export default async function PostsPage() {
           All Posts{" "}
           {posts && (
             <Chip radius="full" variant="shadow" className="ms-2">
-              {posts?.posts.length}
+              {posts?.posts?.length || 0}
             </Chip>
           )}
         </h1>

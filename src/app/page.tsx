@@ -3,8 +3,9 @@ import Contact from "@/components/Contact";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
-import Header from "@/components/header/header";
+
 import type { Skill } from "@prisma/client";
+import Header from "@/components/header/header";
 
 export default async function Home() {
   let skillsData = null;
