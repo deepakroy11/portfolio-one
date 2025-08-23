@@ -34,10 +34,11 @@ RUN npm ci --omit=dev
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/next.config.ts ./next.config.ts
 
 # Only copy next.config.js if it exists
 # If you don’t use it, comment this out to avoid checksum errors
-COPY --from=builder /app/next.config.js ./next.config.js
+
 
 # Optional: Copy environment variables
 # COPY .env.production .env
