@@ -1,8 +1,8 @@
 import { db } from "@/db";
 import AdminSettingsTabs from "@/components/admin/AdminSettingsTabs";
-import { BasicDetail } from "@prisma/client";
+import { BasicDetails } from "@prisma/client";
 
-const fallbackDetails: BasicDetail = {
+const fallbackDetails: BasicDetails = {
   id: "",
   siteName: null,
   tagLine: null,

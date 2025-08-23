@@ -29,5 +29,5 @@ RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
 USER nextjs
 
 
-# Run the app
-CMD ["npm", "run", "start"]
+# Generate Prisma client, apply migrations, then start app
+CMD npm run db:generate && npm run db:deploy && npm run start
