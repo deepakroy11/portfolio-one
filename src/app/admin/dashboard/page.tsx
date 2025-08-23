@@ -69,7 +69,7 @@ export default async function DashboardPage() {
             <CardBody>
               {recentPosts.length > 0 ? (
                 <div className="space-y-4">
-                  {recentPosts.map((post) => (
+                  {recentPosts.map((post: any) => (
                     <div
                       key={post.id}
                       className="flex justify-between items-start"
@@ -99,7 +99,7 @@ export default async function DashboardPage() {
             <CardBody>
               {recentUsers.length > 0 ? (
                 <div className="space-y-4">
-                  {recentUsers.map((user) => (
+                  {recentUsers.map((user: any) => (
                     <div
                       key={user.id}
                       className="flex justify-between items-center"
