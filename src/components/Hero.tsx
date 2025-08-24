@@ -34,7 +34,11 @@ export default function Hero({
       <MotionBackground />
       <div className="relative z-10 flex flex-col items-center">
         <Image
-          src={details.profileImage || "/avatar.jpg"}
+          src={
+            details.profileImage
+              ? `${process.env.NEXT_PUBLIC_BASE_URL}/${details.profileImage}`
+              : "/avatar.jpg"
+          }
           alt="Your Avatar"
           className="w-40 h-40 rounded-full shadow-lg mb-6"
         />
