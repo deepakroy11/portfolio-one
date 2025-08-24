@@ -26,8 +26,7 @@ export default function Projects({
   projects?: Project[];
   skills?: Skill[];
 }) {
-
-
+  console.log("Base URL", process.env.NEXT_PUBLIC_BASE_URL);
   const projectList = projects ?? [];
 
   return (

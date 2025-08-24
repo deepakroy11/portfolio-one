@@ -18,8 +18,9 @@ export default function About({
   basicDetails?: BasicDetails;
 }) {
   const defaultAbout = {
-    aboutMe: "I'm a passionate full-stack developer with expertise in modern web technologies. I love creating beautiful, functional applications that solve real-world problems.",
-    aboutMeImage: "about-me.jpg"
+    aboutMe:
+      "I'm a passionate full-stack developer with expertise in modern web technologies. I love creating beautiful, functional applications that solve real-world problems.",
+    aboutMeImage: "about-me.jpg",
   };
 
   const details = basicDetails || defaultAbout;
@@ -29,7 +30,7 @@ export default function About({
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
         <div className="md:w-1/2">
           <Image
-            src={details.aboutMeImage ? `${process.env.NEXT_PUBLIC_BASE_URL}/${details.aboutMeImage}` : "/about-me.jpg"}
+            src={details.aboutMeImage || "/about-me.jpg"}
             alt="About"
             isBlurred
             className="w-full rounded-xl shadow-xl transform hover:scale-105 transition-transform duration-300"
