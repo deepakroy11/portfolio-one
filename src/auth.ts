@@ -76,6 +76,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
   },
-  debug: process.env.NODE_ENV === "development",
+  debug: true,
   trustHost: true,
 });
