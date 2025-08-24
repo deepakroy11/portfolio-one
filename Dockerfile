@@ -1,59 +1,60 @@
+# -------------------------------
 # Stage 1: Build
+# -------------------------------
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Install OpenSSL and other dependencies
+# Install OpenSSL (required by Prisma)
 RUN apk add --no-cache openssl
 
-# Copy Prisma schema first (needed for postinstall script)
+# Copy Prisma schema first (for postinstall hooks)
 COPY prisma ./prisma
 
 # Install dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Generate Prisma client
+# Generate Prisma client (without engine to reduce size)
 RUN npx prisma generate --no-engine
 
-# Copy rest of the source code
+# Copy the rest of the source code
 COPY . .
 
 # Build the Next.js app
 RUN npm run build
 
-# Stage 2: Production runtime
+# -------------------------------
+# Stage 2: Production Runtime
+# -------------------------------
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-# Install OpenSSL for production
+# Install OpenSSL for runtime
 RUN apk add --no-cache openssl
 
-# Copy Prisma schema first (needed for postinstall script)
+# Copy Prisma schema (needed for runtime client)
 COPY --from=builder /app/prisma ./prisma
 
 # Install only production dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev
 
-# Copy built app and necessary files
+# Copy built app and required files
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.ts ./next.config.ts
 
-# Only copy next.config.js if it exists
-# If you don’t use it, comment this out to avoid checksum errors
-
-
-# Optional: Copy environment variables
-# COPY .env.production .env
+# Optional: If you use next.config.js instead, copy that instead
+# COPY --from=builder /app/next.config.js ./next.config.js
 
 # Expose Next.js default port
 EXPOSE 3000
 
-# Run as non-root user for security
-RUN addgroup -S nodejs || true && adduser -S -G nodejs nextjs || true
+# Create non-root user and fix permissions
+RUN addgroup -S nodejs && adduser -S nextjs -G nodejs && \
+    chown -R nextjs:nodejs /app
+
 USER nextjs
 
-
 # Final startup command
-CMD npx prisma generate && npx prisma migrate deploy && npm run start
+CMD ["npm", "run", "start"]
