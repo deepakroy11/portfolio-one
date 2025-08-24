@@ -3,7 +3,7 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Install OpenSSL and other dependencies
-RUN apt-get update -y && apt-get install -y openssl
+RUN apk add --no-cache openssl
 
 # Copy Prisma schema first (needed for postinstall script)
 COPY prisma ./prisma
@@ -26,7 +26,7 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 # Install OpenSSL for production
-RUN apt-get update -y && apt-get install -y openssl
+RUN apk add --no-cache openssl
 
 # Copy Prisma schema first (needed for postinstall script)
 COPY --from=builder /app/prisma ./prisma
@@ -51,7 +51,8 @@ COPY --from=builder /app/next.config.ts ./next.config.ts
 EXPOSE 3000
 
 # Run as non-root user for security
-RUN addgroup -S nodejs || true && adduser -S -G nodejs nextjs || true
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
 USER nextjs
 
 
