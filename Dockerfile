@@ -26,6 +26,9 @@ WORKDIR /app
 # Install OpenSSL for production
 RUN apt-get update -y && apt-get install -y openssl
 
+# Copy Prisma schema first (needed for postinstall script)
+COPY --from=builder /app/prisma ./prisma
+
 # Install only production dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev
@@ -33,7 +36,6 @@ RUN npm ci --omit=dev
 # Copy built app and necessary files
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/next.config.ts ./next.config.ts
 
 # Only copy next.config.js if it exists
