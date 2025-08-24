@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:18-slim AS builder
+FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Install OpenSSL and other dependencies
@@ -22,7 +22,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production runtime
-FROM node:18-slim AS runner
+FROM node:18-alpine AS runner
 WORKDIR /app
 
 # Install OpenSSL for production
@@ -51,8 +51,9 @@ COPY --from=builder /app/next.config.ts ./next.config.ts
 EXPOSE 3000
 
 # Run as non-root user for security
-RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
+RUN addgroup -S nodejs || true && adduser -S -G nodejs nextjs || true
 USER nextjs
+
 
 # Final startup command
 CMD npx prisma generate && npx prisma migrate deploy && npm run start
