@@ -26,6 +26,7 @@ if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  basePath: "/api/auth",
   providers: [
     GitHub({
       clientId: GITHUB_CLIENT_ID,
