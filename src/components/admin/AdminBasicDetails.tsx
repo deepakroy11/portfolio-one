@@ -58,7 +58,7 @@ const AdminBasicDetails = ({ details }: { details: BasicDetails }) => {
     if (aboutMeImg) formData.append("aboutMeImg", aboutMeImg);
 
     try {
-      const response = await fetch("api/settings/basic-details", {
+      const response = await fetch("/api/settings/basic-details", {
         method: "POST",
         body: formData,
       });

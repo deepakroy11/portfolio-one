@@ -5,7 +5,7 @@ const baseUrl =
   process.env.NEXT_PUBLIC_ADMIN_BASE_URL || "http://localhost:3000/admin";
 
 const fetchSinglePost = async (endpoint: string) => {
-  const response = await fetch(`${baseUrl}/${endpoint}`, { cache: "no-store" });
+  const response = await fetch(`/${endpoint}`, { cache: "no-store" });
   if (!response.ok) {
     console.error(
       `Failed to fetch taxonomy from ${endpoint}:`,
