@@ -51,8 +51,7 @@ COPY --from=builder /app/next.config.ts ./next.config.ts
 EXPOSE 3000
 
 # Run as non-root user for security
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
+RUN addgroup -S nodejs || true && adduser -S -G nodejs nextjs || true
 USER nextjs
 
 
