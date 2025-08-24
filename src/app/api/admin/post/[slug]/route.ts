@@ -6,7 +6,8 @@ import fs from "fs";
 import { writeFile } from "fs/promises";
 
 const client = new PrismaClient();
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl =
+  process.env.NEXT_PUBLIC_ADMIN_BASE_URL || "http://localhost:3000/admin";
 
 type UrlSlug = {
   params: Promise<{ slug: string }>;
@@ -128,14 +129,12 @@ export async function PUT(req: NextRequest) {
     const buffer = Buffer.from(bytes);
     const uploadDir = path.join(process.cwd(), "public", "uploads");
 
-
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
 
     const file_name = Date.now() + "-" + imageFile.name;
     const filePath = path.join(uploadDir, file_name);
-
 
     await writeFile(filePath, buffer);
     const imageUrl = `${baseUrl}/uploads/${file_name}`;

@@ -7,7 +7,8 @@ import { writeFile } from "fs/promises";
 import { revalidatePath } from "next/cache";
 
 const client = new PrismaClient();
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl =
+  process.env.NEXT_PUBLIC_ADMIN_BASE_URL || "http://localhost:3000/admin";
 
 // Get Post
 export async function GET() {

@@ -1,7 +1,8 @@
 import EditPostPageClient from "./EditPostPageClient";
 
 export const dynamic = "force-dynamic";
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl =
+  process.env.NEXT_PUBLIC_ADMIN_BASE_URL || "http://localhost:3000/admin";
 
 const fetchSinglePost = async (endpoint: string) => {
   const response = await fetch(`${baseUrl}/${endpoint}`, { cache: "no-store" });
@@ -48,7 +49,6 @@ export default async function PostsPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-
 
   const [post, categories, tags] = await Promise.all([
     fetchSinglePost(`api/post/${slug}`),
