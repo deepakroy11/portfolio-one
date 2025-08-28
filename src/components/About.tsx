@@ -40,10 +40,11 @@ export default function About({
             className="w-full rounded-xl shadow-xl transform hover:scale-105 transition-transform duration-300"
           />
         </div>
-        <div className="md:w-1/2 text-center md:text-left space-y-5">
-          <div>{details.aboutMe}</div>
-          <Button as={Link} color="primary" href="#contact" size="lg">
-            Lets Connet
+        <div className="md:w-1/2 text-center md:text-left space-y-6">
+          <h2 className="text-4xl font-bold mb-6">About Me</h2>
+          <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-300">{details.aboutMe}</p>
+          <Button as={Link} color="primary" href="#contact" size="lg" className="mt-6">
+            Let's Connect
           </Button>
         </div>
       </div>

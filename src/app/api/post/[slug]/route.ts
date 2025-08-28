@@ -13,7 +13,8 @@ type UrlSlug = {
 };
 
 export async function GET(req: NextRequest, { params }: UrlSlug) {
-  const { slug } = await params;
+  const { slug: rawSlug } = await params;
+  const slug = decodeURIComponent(rawSlug);
 
   try {
     const post = await client.post.findUnique({

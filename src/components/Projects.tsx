@@ -32,17 +32,19 @@ export default function Projects({
   return (
     <section id="projects" className="py-24 px-6">
       <h2 className="text-4xl font-bold text-center mb-16 ">My Projects</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {projectList.length === 0 ? (
-          <p className="text-center text-gray-600">No projects found.</p>
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-600 dark:text-gray-400 text-lg">No projects found.</p>
+          </div>
         ) : (
           projectList.map((project) => (
-            <Card key={`${project.id}-${project.title}`} isBlurred>
-              <CardHeader className="flex-col items-start">
+            <Card key={`${project.id}-${project.title}`} isBlurred className="hover:scale-105 transition-transform duration-300">
+              <CardHeader className="p-0">
                 <Image
                   src={`${process.env.NEXT_PUBLIC_BASE_URL}/${project.image}`}
                   alt={project.title}
-                  className="w-full h-full object-cover object-center p-5"
+                  className="w-full h-48 object-cover"
                 />
               </CardHeader>
               <CardBody className="overflow-visible py-2">

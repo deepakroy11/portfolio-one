@@ -57,11 +57,15 @@ export default function BlogPage() {
       setIsLoading(true);
       try {
         const response = await fetch(`/api/blog?${query}`);
-        const data = await response.json();
-        setPosts(data.posts);
-        setTotal(Math.ceil(data.total / LIMIT));
+        if (response.ok) {
+          const data = await response.json();
+          setPosts(data.posts || []);
+          setTotal(Math.ceil((data.total || 0) / LIMIT));
+        }
       } catch (error) {
         console.error("Failed to fetch posts:", error);
+        setPosts([]);
+        setTotal(0);
       } finally {
         setIsLoading(false);
       }

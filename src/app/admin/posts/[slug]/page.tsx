@@ -1,46 +1,20 @@
 import EditPostPageClient from "./EditPostPageClient";
 
 export const dynamic = "force-dynamic";
-const baseUrl =
-  process.env.NEXT_PUBLIC_ADMIN_BASE_URL || "http://localhost:3000/admin";
+const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
 const fetchSinglePost = async (endpoint: string) => {
-  const response = await fetch(`/${endpoint}`, { cache: "no-store" });
-  if (!response.ok) {
-    console.error(
-      `Failed to fetch taxonomy from ${endpoint}:`,
-      response.statusText
-    );
-    return [];
-  }
-
-  try {
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(`Error parsing taxonomy JSON from ${endpoint}:`, error);
-    return [];
-  }
+  const response = await fetch(`${baseUrl}/${endpoint}`, { cache: "no-store" });
+  if (!response.ok) return { post: null };
+  const data = await response.json();
+  return data;
 };
 
 const fetchTaxonomy = async (endpoint: string) => {
-  const response = await fetch(`${baseUrl}/${endpoint}`, { cache: "no-store" });
-
-  if (!response.ok) {
-    console.error(
-      `Failed to fetch taxonomy from ${endpoint}:`,
-      response.statusText
-    );
-    return [];
-  }
-
-  try {
-    const data = await response.json();
-    return data?.metas || [];
-  } catch (error) {
-    console.error(`Error parsing taxonomy JSON from ${endpoint}:`, error);
-    return [];
-  }
+  const response = await fetch(`${baseUrl}/api/taxonomy/${endpoint}`, { cache: "no-store" });
+  if (!response.ok) return [];
+  const data = await response.json();
+  return data?.metas || [];
 };
 
 export default async function PostsPage({
@@ -51,9 +25,9 @@ export default async function PostsPage({
   const { slug } = await params;
 
   const [post, categories, tags] = await Promise.all([
-    fetchSinglePost(`api/post/${slug}`),
-    fetchTaxonomy("api/taxonomy/category"),
-    fetchTaxonomy("api/taxonomy/tags"),
+    fetchSinglePost(`api/post/${encodeURIComponent(slug)}`),
+    fetchTaxonomy("category"),
+    fetchTaxonomy("tags"),
   ]);
 
   const data = {

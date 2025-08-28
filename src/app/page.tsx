@@ -5,7 +5,9 @@ import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 
 import type { Skill } from "@prisma/client";
-import Header from "@/components/header/header";
+import { PrismaClient } from "@prisma/client";
+
+const client = new PrismaClient();
 
 export default async function Home() {
   let skillsData = null;
@@ -13,36 +15,28 @@ export default async function Home() {
   let projectsData = null;
 
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-    skillsData = await fetch(`${baseUrl}/api/settings/skill`).then(
-      (res) => res.json()
-    );
+    const skills = await client.skill.findMany();
+    skillsData = { success: true, skills };
   } catch {
     skillsData = null;
   }
 
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-    projectsData = await fetch(`${baseUrl}/api/settings/project`).then(
-      (res) => res.json()
-    );
+    const projects = await client.project.findMany();
+    projectsData = { success: true, projects };
   } catch {
     projectsData = null;
   }
 
   try {
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-    basicDetailsData = await fetch(
-      `${baseUrl}/api/settings/basic-details`
-    ).then((res) => res.json());
+    const basicDetails = await client.basicDetails.findFirst();
+    basicDetailsData = { success: true, basicDetails };
   } catch {
     basicDetailsData = null;
   }
 
   return (
-    <>
-      <Header />
-      <main className="min-h-screen bg-gradient-to-br">
+    <main className="min-h-screen bg-gradient-to-br">
         <Hero basicDetails={basicDetailsData?.basicDetails} />
         <About basicDetails={basicDetailsData?.basicDetails} />
         <Projects projects={projectsData?.projects} />
@@ -55,7 +49,6 @@ export default async function Home() {
           }))}
         />
         <Contact basicDetails={basicDetailsData?.basicDetails} />
-      </main>
-    </>
+    </main>
   );
 }

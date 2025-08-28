@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { HeroUIProvider } from "@heroui/react";
-import Header from "@/components/header/header";
+import ConditionalHeader from "@/components/ConditionalHeader";
 
 import { ThemeProvider } from "@/context/themeProvider";
 import StructuredData from "@/components/StructuredData";
@@ -108,6 +108,7 @@ export default function RootLayout({
       >
         <HeroUIProvider>
           <ThemeProvider>
+            <ConditionalHeader />
             {children}
           </ThemeProvider>
         </HeroUIProvider>

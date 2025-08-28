@@ -42,17 +42,18 @@ export default function Hero({
           alt="Your Avatar"
           className="w-40 h-40 rounded-full shadow-lg mb-6"
         />
-        <h1 className="text-5xl font-bold">Hi, I&apos;m {details.siteName}</h1>
-        <p className="mt-4 text-xl">{details.tagLine}</p>
-        <Button
-          as={Link}
-          href="#projects"
-          size="lg"
-          color="primary"
-          variant="solid"
-        >
-          View My Work
-        </Button>
+        <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
+          Hi, I&apos;m {details.siteName}
+        </h1>
+        <p className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl">{details.tagLine}</p>
+        <div className="flex gap-4 mt-8">
+          <Button as={Link} href="#projects" size="lg" color="primary" variant="solid">
+            View My Work
+          </Button>
+          <Button as={Link} href="#contact" size="lg" variant="bordered">
+            Get In Touch
+          </Button>
+        </div>
       </div>
     </section>
   );

@@ -10,21 +10,26 @@ const Post = ({ post }: SinglePostProps) => {
     <div className="flex flex-col md:flex-row gap-4">
       {/* Post Image */}
       <div className="w-full md:w-1/3 flex justify-center items-center">
-        <Image
-          src={post.image}
-          alt={post.title}
-          width={300}
-          height={200}
-          // fallbackSrc="/fallback-image-300x200.png"
-          isZoomed
-          className="w-full h-48 object-cover rounded-md"
-        />
+        {post.image && post.image.trim() !== '' && !post.image.includes('picsum.photos') ? (
+          <Image
+            src={post.image}
+            alt={post.title}
+            width={300}
+            height={200}
+            isZoomed
+            className="w-full h-48 object-cover rounded-md"
+          />
+        ) : (
+          <div className="w-full h-48 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-md flex items-center justify-center">
+            <span className="text-white font-semibold text-lg">{post.title.charAt(0)}</span>
+          </div>
+        )}
       </div>
 
       {/* Post Content */}
       <div className="flex-1">
         <h2 className="text-2xl font-semibold mb-1">
-          <Link href={`/blog/${post.slug}`} className="hover:underline">
+          <Link href={`/blog/${encodeURIComponent(post.slug)}`} className="hover:underline">
             {post.title}
           </Link>
         </h2>
@@ -51,7 +56,7 @@ const Post = ({ post }: SinglePostProps) => {
           ))}
         </div>
         <Link
-          href={`/blog/${post.slug}`}
+          href={`/blog/${encodeURIComponent(post.slug)}`}
           className="text-primary-600 hover:underline font-medium text-sm"
         >
           Read more →
