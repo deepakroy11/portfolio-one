@@ -50,30 +50,41 @@ export async function POST(req: NextRequest) {
   };
 
   const uploadFile = async (file: File) => {
-    if (!file || file.size === 0) return null;
+    console.log("Upload attempt:", { name: file?.name, size: file?.size });
+    if (!file || file.size === 0) {
+      console.log("No file or empty file, returning null");
+      return null;
+    }
     try {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const uploadDir = path.join(process.cwd(), "public", "uploads");
+      console.log("Upload directory:", uploadDir);
 
       if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+        console.log("Creating upload directory");
+        fs.mkdirSync(uploadDir, { recursive: true, mode: 0o755 });
       }
-      const file_name = Date.now() + "-" + file.name;
+      const file_name = Date.now() + "-" + file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const filePath = path.join(uploadDir, file_name);
-      await writeFile(filePath, buffer);
+      console.log("Writing file to:", filePath);
+      await writeFile(filePath, buffer, { mode: 0o644 });
+      console.log("File uploaded successfully:", file_name);
       return `/uploads/${file_name}`;
     } catch (error) {
       console.error("File upload failed:", error);
+      console.error("Upload directory:", path.join(process.cwd(), "public", "uploads"));
       throw new Error(`Failed to upload file: ${file?.name}`);
     }
   };
 
+  console.log("Processing profileImage:", { name: profileImage?.name, size: profileImage?.size });
   if (profileImage && profileImage.name !== "" && profileImage.size > 0) {
     const profileImgUrl = await uploadFile(profileImage);
     if (profileImgUrl) data.profileImage = profileImgUrl;
   }
 
+  console.log("Processing aboutMeImage:", { name: aboutMeImage?.name, size: aboutMeImage?.size });
   if (aboutMeImage && aboutMeImage.name !== "" && aboutMeImage.size > 0) {
     const aboutMeImgUrl = await uploadFile(aboutMeImage);
     if (aboutMeImgUrl) data.aboutMeImage = aboutMeImgUrl;
