@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
   };
 
   const uploadFile = async (file: File) => {
-    if (!file) return "https://picsum.photos/1120/400";
+    if (!file || file.size === 0) return null;
     try {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
@@ -71,12 +71,12 @@ export async function POST(req: NextRequest) {
 
   if (profileImage && profileImage.name !== "" && profileImage.size > 0) {
     const profileImgUrl = await uploadFile(profileImage);
-    data.profileImage = profileImgUrl;
+    if (profileImgUrl) data.profileImage = profileImgUrl;
   }
 
   if (aboutMeImage && aboutMeImage.name !== "" && aboutMeImage.size > 0) {
     const aboutMeImgUrl = await uploadFile(aboutMeImage);
-    data.aboutMeImage = aboutMeImgUrl;
+    if (aboutMeImgUrl) data.aboutMeImage = aboutMeImgUrl;
   }
 
   try {

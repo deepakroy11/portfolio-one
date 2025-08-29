@@ -124,21 +124,24 @@ export async function PUT(req: NextRequest) {
     updatedAt: new Date(),
   };
 
-  if (imageFile) {
-    const bytes = await imageFile.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
+  if (imageFile && imageFile.size > 0) {
+    try {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const uploadDir = path.join(process.cwd(), "public", "uploads");
 
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      const file_name = Date.now() + "-" + imageFile.name;
+      const filePath = path.join(uploadDir, file_name);
+
+      await writeFile(filePath, buffer);
+      payload.image = `/uploads/${file_name}`;
+    } catch (error) {
+      console.error("File upload failed:", error);
     }
-
-    const file_name = Date.now() + "-" + imageFile.name;
-    const filePath = path.join(uploadDir, file_name);
-
-    await writeFile(filePath, buffer);
-    const imageUrl = `${baseUrl}/uploads/${file_name}`;
-    payload.image = imageUrl;
   }
 
   try {
