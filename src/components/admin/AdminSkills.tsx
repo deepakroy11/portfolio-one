@@ -111,9 +111,11 @@ export default function AdminSkills({ skills }: AdminSkillsProps) {
           <Card key={skill.id}>
             <CardBody>
               <div className="flex gap-4">
-                {skill.image && (
-                  <Image src={skill.image} alt={skill.title} className="w-16 h-16 object-cover" />
-                )}
+                <Image 
+                  src={skill.image ? `${process.env.NEXT_PUBLIC_BASE_URL}/${skill.image}` : '/placeholder-skill.png'} 
+                  alt={skill.title} 
+                  className="w-16 h-16 object-cover rounded" 
+                />
                 <div className="flex-1">
                   <h3 className="font-medium">{skill.title}</h3>
                   <p className="text-sm text-gray-600">{skill.summary}</p>

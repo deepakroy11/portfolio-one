@@ -124,9 +124,11 @@ export default function AdminProjects({ projects }: AdminProjectsProps) {
           <Card key={project.id}>
             <CardBody>
               <div className="flex gap-4">
-                {project.image && (
-                  <Image src={project.image} alt={project.title} className="w-20 h-20 object-cover" />
-                )}
+                <Image 
+                  src={project.image ? `${process.env.NEXT_PUBLIC_BASE_URL}/${project.image}` : '/placeholder-project.png'} 
+                  alt={project.title} 
+                  className="w-20 h-20 object-cover rounded" 
+                />
                 <div className="flex-1">
                   <h3 className="font-medium">{project.title}</h3>
                   <p className="text-sm text-gray-600">{project.summary}</p>
