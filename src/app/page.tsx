@@ -37,8 +37,8 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br">
-        <Hero basicDetails={basicDetailsData?.basicDetails} />
-        <About basicDetails={basicDetailsData?.basicDetails} />
+        <Hero basicDetails={basicDetailsData?.basicDetails ?? undefined} />
+        <About basicDetails={basicDetailsData?.basicDetails ?? undefined} />
         <Projects projects={projectsData?.projects} />
         {/* Debug: {JSON.stringify(projectsData)} */}
         <Skills

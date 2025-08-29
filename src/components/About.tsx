@@ -1,16 +1,5 @@
 import { Button, Image, Link } from "@heroui/react";
-
-type BasicDetails = {
-  id: string;
-  siteName: string;
-  tagLine: string;
-  aboutMe: string;
-  aboutMeImage: string;
-  profileImage: string;
-  contactEmail: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import type { BasicDetails } from "@/types";
 
 export default function About({
   basicDetails,

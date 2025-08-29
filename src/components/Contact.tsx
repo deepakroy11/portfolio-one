@@ -3,48 +3,39 @@
 import { Button, Input, Textarea } from "@heroui/react";
 import Link from "next/link";
 import { useState } from "react";
+import type { BasicDetails } from "@/types";
 
-type BasicDetails = {
-  id: string;
-  siteName: string;
-  tagLine: string;
-  aboutMe: string;
-  aboutMeImage: string;
-  profileImage: string;
-  contactEmail: string;
-  createdAt: string;
-  updatedAt: string;
+type ContactProps = {
+  basicDetails?: BasicDetails; // Allow undefined
 };
 
-export default function Contact({
-  basicDetails,
-}: {
-  basicDetails?: BasicDetails;
-}) {
+export default function Contact({ basicDetails }: ContactProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Send the email using the API route
-      const response = await fetch('/api/email/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message })
+      const response = await fetch("/api/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message');
+        throw new Error(data.error || "Failed to send message");
       }
-      
+
       setSubmitStatus("success");
       setName("");
       setEmail("");
@@ -106,10 +97,10 @@ export default function Contact({
             Failed to send message. Please try again.
           </div>
         )}
-        <Button 
-          type="submit" 
-          color="primary" 
-          size="lg" 
+        <Button
+          type="submit"
+          color="primary"
+          size="lg"
           className="w-full"
           isLoading={isSubmitting}
           isDisabled={isSubmitting}
