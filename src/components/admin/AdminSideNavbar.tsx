@@ -5,6 +5,8 @@ import {
   BsPeople,
   BsJournal,
   BsTags,
+  BsFolder,
+  BsTools,
 } from "react-icons/bs";
 import { usePageCheck } from "@/hooks/usePageCheck";
 
@@ -36,6 +38,16 @@ const portfolioMenuItems = [
     href: "/admin/settings",
     label: "Settings",
     icon: BsGear,
+  },
+  {
+    href: "/admin/projects",
+    label: "Projects",
+    icon: BsFolder,
+  },
+  {
+    href: "/admin/skills",
+    label: "Skills",
+    icon: BsTools,
   },
 ];
 

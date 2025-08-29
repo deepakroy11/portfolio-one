@@ -2,8 +2,8 @@
 
 import { Tabs, Tab } from "@heroui/react";
 import AdminBasicDetails from "@/components/admin/AdminBasicDetails";
-import Projects from "@/components/Projects";
-import Skills from "@/components/Skills";
+import AdminProjects from "@/components/admin/AdminProjects";
+import AdminSkills from "@/components/admin/AdminSkills";
 import type {
   BasicDetails as BasicDetailsType,
   Project,
@@ -34,11 +34,11 @@ export default function AdminSettingsTabs({
       </Tab>
 
       <Tab key="skills" title="Skills">
-        <Skills skills={skills} />
+        <AdminSkills skills={skills} />
       </Tab>
 
       <Tab key="projects" title="Projects">
-        <Projects projects={projects} />
+        <AdminProjects projects={projects} />
       </Tab>
     </Tabs>
   );
