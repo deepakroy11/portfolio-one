@@ -50,9 +50,11 @@ COPY --from=builder /app/next.config.ts ./next.config.ts
 # Expose Next.js default port
 EXPOSE 3000
 
-# Create non-root user and fix permissions
-RUN addgroup -S nodejs && adduser -S nextjs -G nodejs && \
-    chown -R nextjs:nodejs /app
+# Create uploads directory with proper permissions
+RUN mkdir -p /app/public/uploads && \
+    addgroup -S nodejs && adduser -S nextjs -G nodejs && \
+    chown -R nextjs:nodejs /app && \
+    chmod -R 755 /app/public/uploads
 
 USER nextjs
 
