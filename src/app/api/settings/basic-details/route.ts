@@ -70,6 +70,14 @@ export async function POST(req: NextRequest) {
       console.log("Writing file to:", filePath);
       await writeFile(filePath, buffer, { mode: 0o644 });
       console.log("File uploaded successfully:", file_name);
+      
+      // Verify file exists after write
+      const fileExists = fs.existsSync(filePath);
+      console.log("File exists after write:", fileExists);
+      if (fileExists) {
+        const stats = fs.statSync(filePath);
+        console.log("File size:", stats.size, "bytes");
+      }
       return `/uploads/${file_name}`;
     } catch (error) {
       console.error("File upload failed:", error);

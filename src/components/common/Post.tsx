@@ -10,7 +10,9 @@ const Post = ({ post }: SinglePostProps) => {
     <div className="flex flex-col md:flex-row gap-4">
       {/* Post Image */}
       <div className="w-full md:w-1/3 flex justify-center items-center">
-        {post.image && post.image.trim() !== '' && !post.image.includes('picsum.photos') ? (
+        {post.image &&
+        post.image.trim() !== "" &&
+        !post.image.includes("picsum.photos") ? (
           <Image
             src={post.image}
             alt={post.title}
@@ -21,18 +23,20 @@ const Post = ({ post }: SinglePostProps) => {
           />
         ) : (
           <div className="w-full h-48 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-md flex items-center justify-center">
-            <span className="text-white font-semibold text-lg">{post.title.charAt(0)}</span>
+            <span className="text-white font-semibold text-lg">
+              {post.title.charAt(0)}
+            </span>
           </div>
         )}
       </div>
 
       {/* Post Content */}
       <div className="flex-1">
-        <h2 className="text-2xl font-semibold mb-1">
+        {/* <h2 className="text-2xl font-semibold mb-1">
           <Link href={`/blog/${encodeURIComponent(post.slug)}`} className="hover:underline">
             {post.title}
           </Link>
-        </h2>
+        </h2> */}
         <p className="text-sm text-gray-500 mb-2">
           By <Link href={`/blog?author=${post.author}`}>{post.author}</Link>,{" "}
           {post.date}
