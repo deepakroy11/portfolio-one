@@ -44,8 +44,7 @@ jobs:
             chmod 755 ./portfolio-one/public/uploads && \
             echo 'NEXTAUTH_URL=https://deepakroy.dev' > ./portfolio-one/.env.production && \
             echo 'NEXT_PUBLIC_BASE_URL=https://deepakroy.dev' >> ./portfolio-one/.env.production && \
-            docker compose build \
-             echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > ./portfolio-one/.env.production &&
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > ./portfolio-one/.env.production &&
             echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> ./portfolio-one/.env.production &&
             echo "NEXTAUTH_URL=https://deepakroy.dev" >> ./portfolio-one/.env.production &&
             echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> ./portfolio-one/.env.production &&
@@ -58,6 +57,5 @@ jobs:
             echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> ./portfolio-one/.env.production &&
             echo "FROM_EMAIL=${{ secrets.FROM_EMAIL }}" >> ./portfolio-one/.env.production &&
             echo "CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}" >> ./portfolio-one/.env.production
-            portfolio-one && \
             docker compose up -d --build portfolio-one
           "
