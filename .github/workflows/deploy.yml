@@ -36,19 +36,30 @@ jobs:
           ./ \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}/portfolio-one/
 
-      - name: Run Docker Compose for portfolio-one
+      - name: Create environment file
         run: |
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-          cd ${{ secrets.SSH_PATH }} && \
-          mkdir -p ./portfolio-one/public/uploads && \
-          chmod 755 ./portfolio-one/public/uploads && \
-          echo 'NEXTAUTH_URL=https://deepakroy.dev' > ./portfolio-one/.env.production && \
-          echo 'NEXT_PUBLIC_BASE_URL=https://deepakroy.dev' >> ./portfolio-one/.env.production && \
-          echo 'AUTH_SECRET=${{ secrets.AUTH_SECRET }}' >> ./portfolio-one/.env.production && \
-          docker compose build \
-              --build-arg AUTH_SECRET=${{ secrets.AUTH_SECRET }} \
-              --build-arg NEXTAUTH_URL=https://deepakroy.dev \
-              --build-arg NEXT_PUBLIC_BASE_URL=https://deepakroy.dev \
-              portfolio-one && \
-          docker compose up -d --build portfolio-one
-          "
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+            cd ${{ secrets.SSH_PATH }} &&
+            mkdir -p ./portfolio-one/public/uploads &&
+            chmod 755 ./portfolio-one/public/uploads &&
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > ./portfolio-one/.env.production &&
+            echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> ./portfolio-one/.env.production &&
+            echo "NEXTAUTH_URL=https://deepakroy.dev" >> ./portfolio-one/.env.production &&
+            echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> ./portfolio-one/.env.production &&
+            echo "GITHUB_CLIENT_ID=${{ secrets.GHUB_CLIENT_ID }}" >> ./portfolio-one/.env.production &&
+            echo "GITHUB_CLIENT_SECRET=${{ secrets.GHUB_CLIENT_SECRET }}" >> ./portfolio-one/.env.production &&
+            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> ./portfolio-one/.env.production &&
+            echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> ./portfolio-one/.env.production &&
+            echo "NODE_ENV=production" >> ./portfolio-one/.env.production &&
+            echo "NEXT_PUBLIC_BASE_URL=https://deepakroy.dev" >> ./portfolio-one/.env.production &&
+            echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> ./portfolio-one/.env.production &&
+            echo "FROM_EMAIL=${{ secrets.FROM_EMAIL }}" >> ./portfolio-one/.env.production &&
+            echo "CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}" >> ./portfolio-one/.env.production
+          '
+
+      - name: Build and deploy
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+            cd ${{ secrets.SSH_PATH }} &&
+            docker compose up -d --build portfolio-one
+          '
