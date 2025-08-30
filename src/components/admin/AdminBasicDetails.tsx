@@ -64,14 +64,13 @@ const AdminBasicDetails = ({ details }: { details: BasicDetails }) => {
       });
       const result = await response.json();
       if (response.ok) {
-        setSuccess(result.message || "Data saved successfully.");
+        setSuccess(result.message || "Data saved successfully");
         setTimeout(() => setSuccess(null), 3000);
       } else {
         setError(result.error || "Something went wrong...");
         setTimeout(() => setError(null), 3000);
       }
     } catch (error) {
-
     } finally {
       setIsLoading(false);
     }
