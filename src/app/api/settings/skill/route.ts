@@ -41,28 +41,38 @@ export async function POST(req: NextRequest) {
   };
 
   const uploadFile = async (file: File) => {
-    if (!file) return "https://picsum.photos/1120/400";
+    console.log("Skill upload attempt:", { name: file?.name, size: file?.size });
+    if (!file || file.size === 0) {
+      console.log("No skill file or empty file, returning null");
+      return null;
+    }
     try {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const uploadDir = path.join(process.cwd(), "public", "uploads", "skills");
+      console.log("Skill upload directory:", uploadDir);
 
       if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+        console.log("Creating skill upload directory");
+        fs.mkdirSync(uploadDir, { recursive: true, mode: 0o755 });
       }
-      const file_name = Date.now() + "-" + file.name;
+      const file_name = Date.now() + "-" + file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const filePath = path.join(uploadDir, file_name);
-      await writeFile(filePath, buffer);
+      console.log("Writing skill file to:", filePath);
+      await writeFile(filePath, buffer, { mode: 0o644 });
+      console.log("Skill file uploaded successfully:", file_name);
       return `uploads/skills/${file_name}`;
     } catch (error) {
-      console.error("File upload failed:", error);
+      console.error("Skill file upload failed:", error);
+      console.error("Upload directory:", path.join(process.cwd(), "public", "uploads", "skills"));
       throw new Error(`Failed to upload file: ${file?.name}`);
     }
   };
 
+  console.log("Processing skill image:", { name: image?.name, size: image?.size });
   if (image && image.name !== "" && image.size > 0) {
     const imageUrl = await uploadFile(image);
-    data.image = imageUrl;
+    if (imageUrl) data.image = imageUrl;
   }
 
   try {
@@ -106,22 +116,28 @@ export async function PUT(req: NextRequest) {
   };
 
   const uploadFile = async (file: File) => {
-    if (!file) return "https://picsum.photos/1120/400";
+    console.log("Skill update upload attempt:", { name: file?.name, size: file?.size });
+    if (!file || file.size === 0) return null;
 
     try {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const uploadDir = path.join(process.cwd(), "public", "uploads", "skills");
+      console.log("Skill update upload directory:", uploadDir);
 
       if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+        console.log("Creating skill update upload directory");
+        fs.mkdirSync(uploadDir, { recursive: true, mode: 0o755 });
       }
-      const file_name = Date.now() + "-" + file.name;
+      const file_name = Date.now() + "-" + file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const filePath = path.join(uploadDir, file_name);
-      await writeFile(filePath, buffer);
+      console.log("Writing skill update file to:", filePath);
+      await writeFile(filePath, buffer, { mode: 0o644 });
+      console.log("Skill update file uploaded successfully:", file_name);
       return `uploads/skills/${file_name}`;
     } catch (error) {
-      console.error("File upload failed:", error);
+      console.error("Skill update file upload failed:", error);
+      console.error("Upload directory:", path.join(process.cwd(), "public", "uploads", "skills"));
       throw new Error(`Failed to upload file: ${file?.name}`);
     }
   };

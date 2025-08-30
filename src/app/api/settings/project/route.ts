@@ -63,7 +63,11 @@ export async function POST(req: NextRequest) {
   }
 
   const uploadFile = async (file: File) => {
-    if (!file) return "https://picsum.photos/1120/400";
+    console.log("Project upload attempt:", { name: file?.name, size: file?.size });
+    if (!file || file.size === 0) {
+      console.log("No project file or empty file, returning null");
+      return null;
+    }
     try {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
@@ -73,16 +77,21 @@ export async function POST(req: NextRequest) {
         "uploads",
         "projects"
       );
+      console.log("Project upload directory:", uploadDir);
 
       if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+        console.log("Creating project upload directory");
+        fs.mkdirSync(uploadDir, { recursive: true, mode: 0o755 });
       }
-      const file_name = Date.now() + "-" + file.name;
+      const file_name = Date.now() + "-" + file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const filePath = path.join(uploadDir, file_name);
-      await writeFile(filePath, buffer);
+      console.log("Writing project file to:", filePath);
+      await writeFile(filePath, buffer, { mode: 0o644 });
+      console.log("Project file uploaded successfully:", file_name);
       return `uploads/projects/${file_name}`;
     } catch (error) {
-      console.error("File upload failed:", error);
+      console.error("Project file upload failed:", error);
+      console.error("Upload directory:", path.join(process.cwd(), "public", "uploads", "projects"));
       throw new Error(`Failed to upload file: ${file?.name}`);
     }
   };

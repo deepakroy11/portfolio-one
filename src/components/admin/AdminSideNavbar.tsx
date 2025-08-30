@@ -39,16 +39,6 @@ const portfolioMenuItems = [
     label: "Settings",
     icon: BsGear,
   },
-  {
-    href: "/admin/projects",
-    label: "Projects",
-    icon: BsFolder,
-  },
-  {
-    href: "/admin/skills",
-    label: "Skills",
-    icon: BsTools,
-  },
 ];
 
 const AdminSideNavbar = () => {
