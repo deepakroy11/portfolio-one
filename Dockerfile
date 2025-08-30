@@ -4,6 +4,16 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
+# Define build argument
+ARG AUTH_SECRET
+ARG NEXTAUTH_URL
+ARG NEXT_PUBLIC_BASE_URL
+
+# Make them available inside container environment
+ENV AUTH_SECRET=${AUTH_SECRET}
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+
 # Install OpenSSL (required by Prisma)
 RUN apk add --no-cache openssl
 
@@ -17,8 +27,6 @@ RUN npm ci
 # Generate Prisma client (without engine to reduce size)
 RUN npx prisma generate --no-engine
 
-# Copy env file so Next.js build can access AUTH_SECRET, NEXTAUTH_URL, etc.
-COPY .env.production .env.production
 
 # Copy the rest of the source code
 COPY . .
