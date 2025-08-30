@@ -12,7 +12,7 @@ const client = new PrismaClient();
 const baseUrl =
   process.env.NEXT_PUBLIC_ADMIN_BASE_URL || "http://localhost:3000/admin";
 
-// Get Post
+// Get Post updated
 export async function GET() {
   try {
     const posts = await client.post.findMany({
