@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
 
   if (image && image.name !== "" && image.size > 0) {
     const imageUrl = await uploadFile(image);
-    data.image = imageUrl;
+    if (imageUrl) data.image = imageUrl;
   }
 
   try {
@@ -192,7 +192,7 @@ export async function PUT(req: NextRequest) {
 
   if (image && image.name !== "" && image.size > 0) {
     const imageUrl = await uploadFile(image);
-    data.image = imageUrl;
+    if (imageUrl) data.image = imageUrl;
   }
 
   try {
