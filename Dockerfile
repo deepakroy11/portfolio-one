@@ -17,6 +17,9 @@ RUN npm ci
 # Generate Prisma client (without engine to reduce size)
 RUN npx prisma generate --no-engine
 
+# Copy env file so Next.js build can access AUTH_SECRET, NEXTAUTH_URL, etc.
+COPY .env.production .env.production
+
 # Copy the rest of the source code
 COPY . .
 
