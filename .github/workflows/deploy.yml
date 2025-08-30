@@ -31,6 +31,7 @@ jobs:
           --compress-level=9 \
           --exclude ".git/" \
           --exclude ".github/" \
+          --exclude ".env.production" \
           -e "ssh -p ${{ secrets.SSH_PORT }}" \
           ./ \
           ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}/portfolio-one/
@@ -41,5 +42,7 @@ jobs:
             cd ${{ secrets.SSH_PATH }} && \
             mkdir -p ./portfolio-one/public/uploads && \
             chmod 755 ./portfolio-one/public/uploads && \
+            echo 'NEXTAUTH_URL=https://deepakroy.dev' > ./portfolio-one/.env.production && \
+            echo 'NEXT_PUBLIC_BASE_URL=https://deepakroy.dev' >> ./portfolio-one/.env.production && \
             docker compose up -d --build portfolio-one
           "
