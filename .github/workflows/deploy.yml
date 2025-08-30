@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "portfolio-one/**" # only trigger if portfolio-one folder changes
 
 jobs:
   deploy:
