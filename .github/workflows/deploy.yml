@@ -39,24 +39,37 @@ jobs:
       - name: Run Docker Compose
         run: |
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-            cd ${{ secrets.SSH_PATH }}/portfolio-one && \
-            mkdir -p ./public/uploads && \
-            chmod 755 ./public/uploads && \
-            rm -f .env.production && \
-            
-            echo \"DATABASE_URL=${{ secrets.DATABASE_URL }}\" >> .env.production && \
-            echo \"AUTH_SECRET=${{ secrets.AUTH_SECRET }}\" >> .env.production && \
-            echo \"NEXTAUTH_URL=https://deepakroy.dev\" >> .env.production && \
-            echo \"NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}\" >> .env.production && \
-            echo \"GITHUB_CLIENT_ID=${{ secrets.GHUB_CLIENT_ID }}\" >> .env.production && \
-            echo \"GITHUB_CLIENT_SECRET=${{ secrets.GHUB_CLIENT_SECRET }}\" >> .env.production && \
-            echo \"GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}\" >> .env.production && \
-            echo \"GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}\" >> .env.production && \
-            echo \"NODE_ENV=production\" >> .env.production && \
-            echo \"NEXT_PUBLIC_BASE_URL=https://deepakroy.dev\" >> .env.production && \
-            echo \"RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}\" >> .env.production && \
-            echo \"FROM_EMAIL=${{ secrets.FROM_EMAIL }}\" >> .env.production && \
-            echo \"CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}\" >> .env.production && \
-            
-            docker compose up -d --build portfolio-one
-          "
+          cd ${{ secrets.SSH_PATH }} && \
+          mkdir -p ./portfolio-one/public/uploads && \
+          chmod 755 ./portfolio-one/public/uploads && \
+          rm -f ./portfolio-one/.env.production && \
+
+          export DATABASE_URL='${{ secrets.DATABASE_URL }}' && \
+          export AUTH_SECRET='${{ secrets.AUTH_SECRET }}' && \
+          export NEXTAUTH_URL='https://deepakroy.dev' && \
+          export NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' && \
+          export GITHUB_CLIENT_ID='${{ secrets.GHUB_CLIENT_ID }}' && \
+          export GITHUB_CLIENT_SECRET='${{ secrets.GHUB_CLIENT_SECRET }}' && \
+          export GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' && \
+          export GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' && \
+          export NODE_ENV='production' && \
+          export NEXT_PUBLIC_BASE_URL='https://deepakroy.dev' && \
+          export RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' && \
+          export FROM_EMAIL='${{ secrets.FROM_EMAIL }}' && \
+          export CONTACT_EMAIL='${{ secrets.CONTACT_EMAIL }}' && \
+
+          echo 'DATABASE_URL=${{ secrets.DATABASE_URL }}' >> ./portfolio-one/.env.production && \
+          echo 'AUTH_SECRET=${{ secrets.AUTH_SECRET }}' >> ./portfolio-one/.env.production && \
+          echo 'NEXTAUTH_URL=https://deepakroy.dev' >> ./portfolio-one/.env.production && \
+          echo 'NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}' >> ./portfolio-one/.env.production && \
+          echo 'GITHUB_CLIENT_ID=${{ secrets.GHUB_CLIENT_ID }}' >> ./portfolio-one/.env.production && \
+          echo 'GITHUB_CLIENT_SECRET=${{ secrets.GHUB_CLIENT_SECRET }}' >> ./portfolio-one/.env.production && \
+          echo 'GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}' >> ./portfolio-one/.env.production && \
+          echo 'GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}' >> ./portfolio-one/.env.production && \
+          echo 'NODE_ENV=production' >> ./portfolio-one/.env.production && \
+          echo 'NEXT_PUBLIC_BASE_URL=https://deepakroy.dev' >> ./portfolio-one/.env.production && \
+          echo 'RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}' >> ./portfolio-one/.env.production && \
+          echo 'FROM_EMAIL=${{ secrets.FROM_EMAIL }}' >> ./portfolio-one/.env.production && \
+          echo 'CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}' >> ./portfolio-one/.env.production && \
+
+          docker compose up -d --build portfolio-one
