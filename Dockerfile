@@ -4,25 +4,6 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# --- Build-time arguments (passed from docker-compose.yml or GitHub Actions) ---
-ARG DATABASE_URL
-ARG AUTH_SECRET
-ARG NEXTAUTH_URL
-ARG NEXTAUTH_SECRET
-ARG GITHUB_CLIENT_ID
-ARG GITHUB_CLIENT_SECRET
-ARG GOOGLE_CLIENT_ID
-ARG GOOGLE_CLIENT_SECRET
-ARG NODE_ENV=production
-ARG NEXT_PUBLIC_BASE_URL
-ARG RESEND_API_KEY
-ARG FROM_EMAIL
-ARG CONTACT_EMAIL
-
-# --- Export only the ones needed at build-time ---
-ENV NODE_ENV=$NODE_ENV
-ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
-
 # Install OpenSSL (required by Prisma)
 RUN apk add --no-cache openssl
 
@@ -33,7 +14,7 @@ COPY prisma ./prisma
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Generate Prisma client (without engine to reduce size)
+# Generate Prisma client
 RUN npx prisma generate --no-engine
 
 # Copy the rest of the source code
@@ -51,7 +32,7 @@ WORKDIR /app
 # Install OpenSSL for runtime
 RUN apk add --no-cache openssl
 
-# Copy Prisma schema (needed for runtime client)
+# Copy Prisma schema
 COPY --from=builder /app/prisma ./prisma
 
 # Install only production dependencies
@@ -62,7 +43,6 @@ RUN npm ci --omit=dev
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.ts ./next.config.ts
-# COPY --from=builder /app/next.config.js ./next.config.js   # if using JS config
 
 # Expose Next.js default port
 EXPOSE 3000
@@ -75,5 +55,4 @@ RUN mkdir -p /app/public/uploads && \
 
 USER nextjs
 
-# Final startup command
 CMD ["npm", "run", "start"]
