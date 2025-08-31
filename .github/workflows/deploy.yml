@@ -44,6 +44,21 @@ jobs:
             chmod 755 ./portfolio-one/public/uploads && \
             rm -f ./portfolio-one/.env.production && \
 
+            # Export build-time variables so Docker can access them
+            export DATABASE_URL='${{ secrets.DATABASE_URL }}' && \
+            export AUTH_SECRET='${{ secrets.AUTH_SECRET }}' && \
+            export NEXTAUTH_URL='https://deepakroy.dev' && \
+            export NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' && \
+            export GITHUB_CLIENT_ID='${{ secrets.GHUB_CLIENT_ID }}' && \
+            export GITHUB_CLIENT_SECRET='${{ secrets.GHUB_CLIENT_SECRET }}' && \
+            export GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' && \
+            export GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' && \
+            export NODE_ENV='production' && \
+            export NEXT_PUBLIC_BASE_URL='https://deepakroy.dev' && \
+            export RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' && \
+            export FROM_EMAIL='${{ secrets.FROM_EMAIL }}' && \
+            export CONTACT_EMAIL='${{ secrets.CONTACT_EMAIL }}' && \
+            
             # Write runtime environment variables to .env.production file
             echo 'DATABASE_URL=${{ secrets.DATABASE_URL }}' > ./portfolio-one/.env.production && \
             echo 'AUTH_SECRET=${{ secrets.AUTH_SECRET }}' >> ./portfolio-one/.env.production && \
@@ -59,20 +74,6 @@ jobs:
             echo 'FROM_EMAIL=${{ secrets.FROM_EMAIL }}' >> ./portfolio-one/.env.production && \
             echo 'CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}' >> ./portfolio-one/.env.production && \
 
-            # Run Docker Compose, passing build-time variables
-            docker compose up -d --build \
-            --build-arg DATABASE_URL='${{ secrets.DATABASE_URL }}' \
-            --build-arg AUTH_SECRET='${{ secrets.AUTH_SECRET }}' \
-            --build-arg NEXTAUTH_URL='https://deepakroy.dev' \
-            --build-arg NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
-            --build-arg GITHUB_CLIENT_ID='${{ secrets.GHUB_CLIENT_ID }}' \
-            --build-arg GITHUB_CLIENT_SECRET='${{ secrets.GHUB_CLIENT_SECRET }}' \
-            --build-arg GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' \
-            --build-arg GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' \
-            --build-arg NODE_ENV='production' \
-            --build-arg NEXT_PUBLIC_BASE_URL='https://deepakroy.dev' \
-            --build-arg RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' \
-            --build-arg FROM_EMAIL='${{ secrets.FROM_EMAIL }}' \
-            --build-arg CONTACT_EMAIL='${{ secrets.CONTACT_EMAIL }}' \
-            portfolio-one
+            # Run Docker Compose, using exported variables for the build
+            docker compose up -d --build portfolio-one
           "
