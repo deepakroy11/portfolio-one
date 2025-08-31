@@ -20,6 +20,35 @@ RUN npx prisma generate --no-engine
 # Copy the rest of the source code
 COPY . .
 
+# Copy env file if exists (or use build args)
+ARG DATABASE_URL
+ARG AUTH_SECRET
+ARG NEXTAUTH_URL
+ARG NEXTAUTH_SECRET
+ARG GITHUB_CLIENT_ID
+ARG GITHUB_CLIENT_SECRET
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG NEXT_PUBLIC_BASE_URL
+ARG RESEND_API_KEY
+ARG FROM_EMAIL
+ARG CONTACT_EMAIL
+
+# Write the env variables inside the build
+RUN echo 'DATABASE_URL=${{ secrets.DATABASE_URL }}' >> .env.production && \
+    echo 'AUTH_SECRET=${{ secrets.AUTH_SECRET }}' >> .env.production && \
+    echo 'NEXTAUTH_URL=https://deepakroy.dev' >> .env.production && \
+    echo 'NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}' >> .env.production && \
+    echo 'GITHUB_CLIENT_ID=${{ secrets.GHUB_CLIENT_ID }}' >> .env.production && \
+    echo 'GITHUB_CLIENT_SECRET=${{ secrets.GHUB_CLIENT_SECRET }}' >> .env.production && \
+    echo 'GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}' >> .env.production && \
+    echo 'GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}' >> .env.production && \
+    echo 'NODE_ENV=production' >> .env.production && \
+    echo 'NEXT_PUBLIC_BASE_URL=https://deepakroy.dev' >> .env.production && \
+    echo 'RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}' >> .env.production && \
+    echo 'FROM_EMAIL=${{ secrets.FROM_EMAIL }}' >> .env.production && \
+    echo 'CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}' >> .env.production && \
+
 # Build the Next.js app
 RUN npm run build
 

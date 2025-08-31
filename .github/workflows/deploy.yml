@@ -42,21 +42,5 @@ jobs:
             cd ${{ secrets.SSH_PATH }}/portfolio-one && \
             mkdir -p ./public/uploads && \
             chmod 755 ./public/uploads && \
-            rm -f .env.production && \
-            
-            echo 'DATABASE_URL=${{ secrets.DATABASE_URL }}' >> .env.production && \
-            echo 'AUTH_SECRET=${{ secrets.AUTH_SECRET }}' >> .env.production && \
-            echo 'NEXTAUTH_URL=https://deepakroy.dev' >> .env.production && \
-            echo 'NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}' >> .env.production && \
-            echo 'GITHUB_CLIENT_ID=${{ secrets.GHUB_CLIENT_ID }}' >> .env.production && \
-            echo 'GITHUB_CLIENT_SECRET=${{ secrets.GHUB_CLIENT_SECRET }}' >> .env.production && \
-            echo 'GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}' >> .env.production && \
-            echo 'GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}' >> .env.production && \
-            echo 'NODE_ENV=production' >> .env.production && \
-            echo 'NEXT_PUBLIC_BASE_URL=https://deepakroy.dev' >> .env.production && \
-            echo 'RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}' >> .env.production && \
-            echo 'FROM_EMAIL=${{ secrets.FROM_EMAIL }}' >> .env.production && \
-            echo 'CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}' >> .env.production && \
-            
             docker compose up -d --build portfolio-one
           "
