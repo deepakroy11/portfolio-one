@@ -1,6 +1,16 @@
 import { db } from "@/db";
 
 export const getDashboardStats = async () => {
+  // Skip database calls during build
+  if (process.env.SKIP_BUILD_VALIDATION === "true") {
+    return {
+      postsCount: 0,
+      usersCount: 0,
+      taxonomiesCount: 0,
+      projectsCount: 0,
+    };
+  }
+
   const [postsCount, usersCount, taxonomiesCount, projectsCount] = await Promise.all([
     db.post.count(),
     db.user.count(),
@@ -17,6 +27,11 @@ export const getDashboardStats = async () => {
 };
 
 export const getRecentPosts = async (limit = 5) => {
+  // Skip database calls during build
+  if (process.env.SKIP_BUILD_VALIDATION === "true") {
+    return [];
+  }
+
   return db.post.findMany({
     take: limit,
     orderBy: { createdAt: "desc" },
@@ -32,6 +47,11 @@ export const getRecentPosts = async (limit = 5) => {
 };
 
 export const getRecentUsers = async (limit = 5) => {
+  // Skip database calls during build
+  if (process.env.SKIP_BUILD_VALIDATION === "true") {
+    return [];
+  }
+
   return db.user.findMany({
     take: limit,
     orderBy: { createdAt: "desc" },
