@@ -9,6 +9,8 @@ import { PrismaClient } from "@prisma/client";
 
 const client = new PrismaClient();
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   let skillsData = null;
   let basicDetailsData = null;

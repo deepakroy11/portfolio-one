@@ -2,6 +2,8 @@ import { Button, Chip, Link } from "@heroui/react";
 import UserListClient from "./userListClient";
 import { db } from "@/db";
 
+export const dynamic = 'force-dynamic';
+
 export default async function UsersPage() {
   const users = await db.user.findMany({
     include: {

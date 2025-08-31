@@ -2,6 +2,8 @@ import { db } from "@/db";
 import AdminSettingsTabs from "@/components/admin/AdminSettingsTabs";
 import { BasicDetails } from "@prisma/client";
 
+export const dynamic = 'force-dynamic';
+
 const fallbackDetails: BasicDetails = {
   id: "",
   siteName: null,
