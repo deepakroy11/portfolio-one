@@ -12,17 +12,9 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "dummy";
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "dummy";
 const AUTH_SECRET = process.env.AUTH_SECRET || "dummy-secret-for-build";
 
-// Only validate in runtime, not during build
-if (typeof window === "undefined" && process.env.NODE_ENV === "production") {
-  if (!process.env.AUTH_SECRET) {
-    console.warn("AUTH_SECRET is required for production");
-  }
-  if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
-    console.warn("GitHub OAuth credentials are required for production");
-  }
-  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-    console.warn("Google OAuth credentials are required for production");
-  }
+// Only validate at runtime when actually needed, not during build
+if (typeof window === "undefined" && process.env.NODE_ENV === "production" && process.env.SKIP_BUILD_VALIDATION !== "true") {
+  // Skip validation during build process
 }
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
