@@ -108,8 +108,8 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
   };
 
   return (
-    <main className="flex-1 p-8 space-y-10">
-      <div className="w-full max-w-4xl flex justify-between">
+    <main className="flex-1 p-4 space-y-6">
+      <div className="w-full flex justify-between">
         <h1 className="text-3xl font-bold">Add Post</h1>
         <Button color="default" as={Link} href="/admin/posts" size="sm">
           Back
@@ -119,7 +119,7 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
       <section className="w-full">
         <Form
           ref={formRef}
-          className="w-full max-w-4xl flex flex-col space-y-4 gap-4"
+          className="w-full flex flex-col space-y-4 gap-4"
           onSubmit={handleSubmit}
         >
           <div className="w-full flex flex-row gap-2">
@@ -193,11 +193,13 @@ const PostPageClient = ({ categories, tags }: PostPageClientProps) => {
           </div>
           
           <div className="w-full">
-            <h1 className="text-small">Content</h1>
-            <CKEditorComponent
-              content={""}
-              onChange={handleEditorChange}
-            />
+            <h1 className="text-small mb-2">Content</h1>
+            <div className="w-full min-h-[500px]">
+              <CKEditorComponent
+                content={""}
+                onChange={handleEditorChange}
+              />
+            </div>
           </div>
 
           <div className="w-full flex flex-row gap-2">

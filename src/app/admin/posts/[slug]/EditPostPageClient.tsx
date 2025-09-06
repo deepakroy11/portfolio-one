@@ -120,7 +120,7 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
 
   return (
     <>
-      <div className="w-full max-w-4xl  flex justify-between">
+      <div className="w-full flex justify-between">
         <h1 className="text-3xl font-bold flex justify-start items-center">
           <Tooltip content="Back to all posts">
             <Link href="/admin/posts" className="font-bold">
@@ -133,11 +133,10 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
           Add New Post
         </Button>
       </div>
-      <div></div>
 
       <section>
         <Form
-          className="w-full max-w-4xl flex flex-col space-y-4 gap-4"
+          className="w-full flex flex-col space-y-4 gap-4"
           onSubmit={handleSubmit}
         >
           <div className="w-full flex flex-row gap-2 ">
@@ -210,11 +209,13 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
             />
           </div>
           <div className="w-full">
-            <h1 className="text-small">Content</h1>
-            <CKEditorComponent
-              content={post?.content || ""}
-              onChange={handleEditorChange}
-            />
+            <h1 className="text-small mb-2">Content</h1>
+            <div className="w-full min-h-[500px]">
+              <CKEditorComponent
+                content={post?.content || ""}
+                onChange={handleEditorChange}
+              />
+            </div>
           </div>
 
           <div className="w-full flex flex-row gap-2">
