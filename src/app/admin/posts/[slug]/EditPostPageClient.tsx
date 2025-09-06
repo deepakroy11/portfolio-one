@@ -210,7 +210,7 @@ const EditPostPageClient = ({ data }: { data: EditPostPageClientProps }) => {
           </div>
           <div className="w-full">
             <h1 className="text-small mb-2">Content</h1>
-            <div className="w-full min-h-[500px]">
+            <div className="w-full">
               <CKEditorComponent
                 content={post?.content || ""}
                 onChange={handleEditorChange}
