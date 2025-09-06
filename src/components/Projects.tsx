@@ -26,7 +26,7 @@ export default function Projects({
   projects?: Project[];
   skills?: Skill[];
 }) {
-  console.log("Base URL", process.env.NEXT_PUBLIC_BASE_URL);
+  // console.log("Base URL", process.env.NEXT_PUBLIC_BASE_URL);
   const projectList = projects ?? [];
 
   return (
@@ -35,11 +35,17 @@ export default function Projects({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {projectList.length === 0 ? (
           <div className="col-span-full text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400 text-lg">No projects found.</p>
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
+              No projects found.
+            </p>
           </div>
         ) : (
           projectList.map((project) => (
-            <Card key={`${project.id}-${project.title}`} isBlurred className="hover:scale-105 transition-transform duration-300">
+            <Card
+              key={`${project.id}-${project.title}`}
+              isBlurred
+              className="hover:scale-105 transition-transform duration-300"
+            >
               <CardHeader className="p-0">
                 <Image
                   src={`${process.env.NEXT_PUBLIC_BASE_URL}/${project.image}`}

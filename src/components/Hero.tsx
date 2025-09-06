@@ -14,7 +14,7 @@ export default function Hero({
   };
 
   const details = basicDetails || defaultDetails;
-  console.log(details);
+  // console.log(details);
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center text-center gap-4 relative overflow-hidden">
@@ -32,9 +32,17 @@ export default function Hero({
         <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
           Hi, I&apos;m {details.siteName}
         </h1>
-        <p className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl">{details.tagLine}</p>
+        <p className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl">
+          {details.tagLine}
+        </p>
         <div className="flex gap-4 mt-8">
-          <Button as={Link} href="#projects" size="lg" color="primary" variant="solid">
+          <Button
+            as={Link}
+            href="#projects"
+            size="lg"
+            color="primary"
+            variant="solid"
+          >
             View My Work
           </Button>
           <Button as={Link} href="#contact" size="lg" variant="bordered">
