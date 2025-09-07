@@ -54,6 +54,10 @@ COPY . .
 # Build the Next.js app
 RUN npm run build
 
+# Copy public and static files for standalone mode
+RUN cp -r public .next/standalone/public
+RUN cp -r .next/static .next/standalone/.next/static
+
 # -------------------------------
 # Stage 2: Production Runtime
 # -------------------------------
@@ -70,10 +74,9 @@ COPY --from=builder /app/prisma ./prisma
 COPY package.json package-lock.json* ./ 
 RUN npm ci --omit=dev
 
-# Copy built app and required files
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.ts ./next.config.ts
+# Copy standalone build
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 # Expose Next.js default port
 EXPOSE 3000
@@ -86,4 +89,4 @@ RUN mkdir -p /app/public/uploads && \
 
 USER nextjs
 
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]
