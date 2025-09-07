@@ -23,7 +23,7 @@ export default function Hero({
         <Image
           src={
             details.profileImage
-              ? `${process.env.NEXT_PUBLIC_BASE_URL}/${details.profileImage}`
+              ? `${process.env.NEXT_PUBLIC_BASE_URL}${details.profileImage}`
               : "/avatar.jpg"
           }
           alt="Your Avatar"
