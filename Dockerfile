@@ -55,7 +55,7 @@ COPY . .
 RUN npm run build
 
 # Copy public and static files for standalone mode
-RUN cp -r public .next/standalone/public
+RUN cp -r public/* .next/standalone/public/
 RUN cp -r .next/static .next/standalone/.next/static
 
 # -------------------------------

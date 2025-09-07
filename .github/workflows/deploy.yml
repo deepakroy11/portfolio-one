@@ -63,3 +63,9 @@ jobs:
             # docker compose --env-file ./portfolio-one/.env up -d --build portfolio-one
             docker compose up -d --build portfolio-one
           "
+
+      - name: Prune Docker Build Cache
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            docker builder prune --all --force
+          "
