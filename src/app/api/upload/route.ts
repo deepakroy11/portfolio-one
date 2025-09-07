@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const filePath = path.join(uploadDir, fileName);
     await writeFile(filePath, buffer);
 
-    const imageUrl = `/uploads/${fileName}`;
+    const imageUrl = `/portfolio-one/uploads/${fileName}`;
 
     return NextResponse.json({ success: true, url: imageUrl });
   } catch (error) {
