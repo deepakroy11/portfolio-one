@@ -137,7 +137,7 @@ export async function PUT(req: NextRequest) {
     const filePath = path.join(uploadDir, file_name);
 
     await writeFile(filePath, buffer);
-    const imageUrl = `${baseUrl}/uploads/${file_name}`;
+    const imageUrl = `${baseUrl}/portfolio-one/uploads/${file_name}`;
     payload.image = imageUrl;
   }
 

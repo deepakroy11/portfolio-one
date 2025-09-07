@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
         const stats = fs.statSync(filePath);
         console.log("File size:", stats.size, "bytes");
       }
-      return `/uploads/${file_name}`;
+      return `/portfolio-one/uploads/${file_name}`;
     } catch (error) {
       console.error("File upload failed:", error);
       console.error("Upload directory:", path.join(process.cwd(), "public", "uploads"));

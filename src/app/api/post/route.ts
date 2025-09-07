@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
     const file_name = Date.now() + "-" + imageFile.name;
     const filePath = path.join(uploadDir, file_name);
     await writeFile(filePath, buffer);
-    imageUrl = `${baseUrl}/uploads/${file_name}`;
+    imageUrl = `${baseUrl}/portfolio-one/uploads/${file_name}`;
   }
 
   try {

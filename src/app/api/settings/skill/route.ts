@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 
 const client = new PrismaClient();
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-const defaulLogo = `${baseUrl}/uploads/place-holder-logo.svg`;
+const defaulLogo = `${baseUrl}/portfolio-one/uploads/place-holder-logo.svg`;
 
 export async function GET() {
   try {
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       console.log("Writing skill file to:", filePath);
       await writeFile(filePath, buffer, { mode: 0o644 });
       console.log("Skill file uploaded successfully:", file_name);
-      return `uploads/skills/${file_name}`;
+      return `/portfolio-one/uploads/skills/${file_name}`;
     } catch (error) {
       console.error("Skill file upload failed:", error);
       console.error("Upload directory:", path.join(process.cwd(), "public", "uploads", "skills"));
@@ -134,7 +134,7 @@ export async function PUT(req: NextRequest) {
       console.log("Writing skill update file to:", filePath);
       await writeFile(filePath, buffer, { mode: 0o644 });
       console.log("Skill update file uploaded successfully:", file_name);
-      return `uploads/skills/${file_name}`;
+      return `/portfolio-one/uploads/skills/${file_name}`;
     } catch (error) {
       console.error("Skill update file upload failed:", error);
       console.error("Upload directory:", path.join(process.cwd(), "public", "uploads", "skills"));

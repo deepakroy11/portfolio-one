@@ -142,7 +142,7 @@ export async function PUT(req: NextRequest) {
       console.log("Writing post image to:", filePath);
 
       await writeFile(filePath, buffer, { mode: 0o644 });
-      payload.image = `/uploads/${file_name}`;
+      payload.image = `/portfolio-one/uploads/${file_name}`;
       console.log("Post image uploaded successfully:", file_name);
     } catch (error) {
       console.error("Post image upload failed:", error);

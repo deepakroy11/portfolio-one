@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 
 const client = new PrismaClient();
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-const defaulProjectImage = `${baseUrl}/uploads/place-holder-logo.svg`;
+const defaulProjectImage = `${baseUrl}/portfolio-one/uploads/place-holder-logo.svg`;
 
 export async function GET() {
   try {
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
       console.log("Writing project file to:", filePath);
       await writeFile(filePath, buffer, { mode: 0o644 });
       console.log("Project file uploaded successfully:", file_name);
-      return `uploads/projects/${file_name}`;
+      return `/portfolio-one/uploads/projects/${file_name}`;
     } catch (error) {
       console.error("Project file upload failed:", error);
       console.error("Upload directory:", path.join(process.cwd(), "public", "uploads", "projects"));
@@ -183,7 +183,7 @@ export async function PUT(req: NextRequest) {
       const file_name = Date.now() + "-" + file.name;
       const filePath = path.join(uploadDir, file_name);
       await writeFile(filePath, buffer);
-      return `uploads/projects/${file_name}`;
+      return `/portfolio-one/uploads/projects/${file_name}`;
     } catch (error) {
       console.error("File upload failed:", error);
       throw new Error(`Failed to upload file: ${file?.name}`);
