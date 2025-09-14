@@ -16,11 +16,31 @@ import { useState } from "react";
 
 const AdminSidebarWrapper = () => {
   const pathname = usePageCheck();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  if (pathname === "/admin/login" || !session) {
+  if (pathname === "/admin/login") {
+    return null;
+  }
+
+  // Show loading state while session is loading
+  if (status === "loading") {
+    return (
+      <aside className="fixed lg:relative w-64 h-screen border border-primary-50 flex m-2 lg:m-4 shadow rounded-2xl flex-col bg-white dark:bg-gray-900">
+        <div className="p-4 lg:p-6">
+          <div className="h-6 bg-default-200 rounded animate-pulse" />
+        </div>
+        <div className="flex-1 p-4 space-y-3">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="h-10 bg-default-100 rounded animate-pulse" />
+          ))}
+        </div>
+      </aside>
+    );
+  }
+
+  if (!session) {
     return null;
   }
 

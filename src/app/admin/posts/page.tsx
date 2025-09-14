@@ -58,8 +58,7 @@ export default function PostsPage() {
       {/* Key Metrics */}
       <section>
         <h2 className="text-lg sm:text-xl font-semibold mb-4">All Posts</h2>
-        {loading && <Spinner />}
-        <ListPostPageClient data={posts} />
+        <ListPostPageClient data={{ ...posts, isLoading: loading }} />
       </section>
     </main>
   );

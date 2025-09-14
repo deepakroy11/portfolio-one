@@ -11,6 +11,7 @@ import {
   Chip,
   Alert,
   Avatar,
+  Skeleton,
 } from "@heroui/react";
 import Link from "next/link";
 import { BsTrash3, BsPencilSquare } from "react-icons/bs";
@@ -41,6 +42,7 @@ interface IncomingDataProps {
   success: boolean;
   posts: PostWithData[];
   error: string | undefined;
+  isLoading: boolean;
 }
 
 const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
@@ -52,50 +54,79 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
 
       {/* Mobile Card View */}
       <div className="block lg:hidden space-y-4">
-        {(posts ?? []).map((post, index) => (
-          <div
-            key={post.slug}
-            className="bg-content1 rounded-lg p-4 shadow-sm border"
-          >
-            <div className="flex justify-between items-start mb-3">
-              <span className="text-sm text-default-500">#{index + 1}</span>
-              <div className="flex gap-2">
-                <Link href={`/admin/posts/${post.slug}`}>
-                  <Button isIconOnly size="sm" variant="flat">
-                    <BsPencilSquare className="w-4 h-4" />
-                  </Button>
-                </Link>
-                <Button isIconOnly size="sm" variant="flat" color="danger">
-                  <BsTrash3 className="w-4 h-4" />
-                </Button>
+        {data.isLoading
+          ? [...Array(3)].map((_, index) => (
+              <div
+                key={index}
+                className="bg-content1 rounded-lg p-4 shadow-sm border space-y-3"
+              >
+                <div className="flex justify-between items-start">
+                  <Skeleton className="h-4 w-8 rounded" />
+                  <div className="flex gap-2">
+                    <Skeleton className="h-8 w-8 rounded" />
+                    <Skeleton className="h-8 w-8 rounded" />
+                  </div>
+                </div>
+                <Skeleton className="h-5 w-3/4 rounded" />
+                <Skeleton className="h-4 w-full rounded" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <Skeleton className="h-4 w-20 rounded" />
+                </div>
+                <div className="flex gap-1">
+                  <Skeleton className="h-6 w-16 rounded-full" />
+                  <Skeleton className="h-6 w-12 rounded-full" />
+                </div>
               </div>
-            </div>
-            <div className="space-y-3">
-              <Link href={`/admin/posts/${post.slug}`} color="secondary">
-                <h3 className="font-medium text-sm">{post.title}</h3>
-              </Link>
-              <p className="text-xs text-default-500 line-clamp-2">
-                {post.summary}
-              </p>
-              <div className="flex items-center gap-2">
-                <Avatar size="sm" name={post.user.name} src={post.user.image} />
-                <span className="text-xs">{post.user.name}</span>
+            ))
+          : (posts ?? []).map((post, index) => (
+              <div
+                key={post.slug}
+                className="bg-content1 rounded-lg p-4 shadow-sm border"
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-sm text-default-500">#{index + 1}</span>
+                  <div className="flex gap-2">
+                    <Link href={`/admin/posts/${post.slug}`}>
+                      <Button isIconOnly size="sm" variant="flat">
+                        <BsPencilSquare className="w-4 h-4" />
+                      </Button>
+                    </Link>
+                    <Button isIconOnly size="sm" variant="flat" color="danger">
+                      <BsTrash3 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <Link href={`/admin/posts/${post.slug}`} color="secondary">
+                    <h3 className="font-medium text-sm">{post.title}</h3>
+                  </Link>
+                  <p className="text-xs text-default-500 line-clamp-2">
+                    {post.summary}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Avatar
+                      size="sm"
+                      name={post.user.name}
+                      src={post.user.image}
+                    />
+                    <span className="text-xs">{post.user.name}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {post.category.map((cat) => (
+                      <Chip key={cat.id} size="sm">
+                        {cat.name}
+                      </Chip>
+                    ))}
+                    {post.tags.map((tag) => (
+                      <Chip key={tag.id} size="sm" variant="flat">
+                        {tag.name}
+                      </Chip>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-1">
-                {post.category.map((cat) => (
-                  <Chip key={cat.id} size="sm">
-                    {cat.name}
-                  </Chip>
-                ))}
-                {post.tags.map((tag) => (
-                  <Chip key={tag.id} size="sm" variant="flat">
-                    {tag.name}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
+            ))}
       </div>
 
       {/* Desktop Table View */}
@@ -111,7 +142,14 @@ const ListPostPageClient = ({ data }: { data: IncomingDataProps }) => {
             <TableColumn>Actions</TableColumn>
           </TableHeader>
 
-          <TableBody emptyContent="No posts available." items={posts ?? []}>
+          <TableBody
+            emptyContent="No posts available."
+            items={posts ?? []}
+            isLoading={data.isLoading}
+            loadingContent={
+              <div className="flex justify-center p-4">Loading posts...</div>
+            }
+          >
             {(posts ?? []).map((post, index) => (
               <TableRow key={post.slug}>
                 <TableCell>{index + 1}</TableCell>
