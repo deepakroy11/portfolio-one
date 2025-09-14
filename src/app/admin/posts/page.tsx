@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip } from "@heroui/react";
+import { Button, Chip, Spinner } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ListPostPageClient from "./ListPostPageClient";
@@ -25,13 +25,13 @@ export default function PostsPage() {
     fetchPosts();
   }, []);
 
-  if (loading) {
-    return (
-      <main className="flex-1 p-4 sm:p-8 space-y-6 sm:space-y-10">
-        <div>Loading...</div>
-      </main>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <main className="flex-1 p-4 sm:p-8 space-y-6 sm:space-y-10">
+  //       <div>Loading...</div>
+  //     </main>
+  //   );
+  // }
 
   return (
     <main className="flex-1 p-4 sm:p-8 space-y-6 sm:space-y-10">
@@ -45,7 +45,12 @@ export default function PostsPage() {
             </Chip>
           )}
         </h1>
-        <Button as={Link} href="/admin/posts/add" prefetch={true} className="w-full sm:w-auto">
+        <Button
+          as={Link}
+          href="/admin/posts/add"
+          prefetch={true}
+          className="w-full sm:w-auto"
+        >
           Add New Post
         </Button>
       </div>
@@ -53,6 +58,7 @@ export default function PostsPage() {
       {/* Key Metrics */}
       <section>
         <h2 className="text-lg sm:text-xl font-semibold mb-4">All Posts</h2>
+        {loading && <Spinner />}
         <ListPostPageClient data={posts} />
       </section>
     </main>

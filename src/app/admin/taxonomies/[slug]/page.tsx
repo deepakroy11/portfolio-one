@@ -40,7 +40,6 @@ const TaxonomyMetaPage = () => {
     useState<TaxonomyWithMetasProps | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-
   useEffect(() => {
     const getTaxonomyMeta = async () => {
       const response = await fetch(`/api/taxonomy/${slug}`);
@@ -69,7 +68,7 @@ const TaxonomyMetaPage = () => {
             </Chip>
           )}
         </h1>
-        <Button as={Link} href={`/taxonomies/${slug}/add`}>
+        <Button as={Link} href={`/admin/taxonomies/${slug}/add`}>
           Add Meta Data for <strong className="capitalize">{slug}</strong>
         </Button>
       </div>
